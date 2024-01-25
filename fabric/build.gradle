@@ -40,6 +40,7 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
 
     // botania
+    modLocalRuntime "vazkii.patchouli:Patchouli:${project.minecraft_version}-76-FABRIC"
     modImplementation "curse.maven:botania-fabric-421839:4557910"
     modLocalRuntime "curse.maven:botania-fabric-421839:4557910"
 //    modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"

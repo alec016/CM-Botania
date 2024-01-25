@@ -42,8 +42,8 @@ ordering = "AFTER"
 side = "BOTH"
 
 [[dependencies.custommachinerybotania]]
-modId = "create"
+modId = "botania"
 mandatory = true
-versionRange = "[${create_forge_version},)"
+versionRange = "[${botania_version},)"
 ordering = "NONE"
 side = "BOTH"

@@ -1,0 +1,9 @@
+{
+  "custommachinerybotania.gui.element.mana.tooltip": "Mana: %s / %s",
+  "custommachinerybotania.jei.ingredient.mana": "Mana: %s",
+  "custommachinerybotania.jei.ingredient.mana.pertick": "Mana: %s",
+  "custommachinerybotania.jei.ingredient.mana.pertick.input": "Consume mana %s @ %s/t",
+  "custommachinerybotania.jei.ingredient.mana.pertick.output": "Produce mana %s @ %s/t",
+  "custommachinerybotania.jei.ingredient.mana.input": "Consume %s mana",
+  "custommachinerybotania.jei.ingredient.mana.output": "Produce %s mana"
+}

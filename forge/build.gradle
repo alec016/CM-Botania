@@ -11,7 +11,7 @@ architectury {
 loom {
     forge {
         mixinConfigs = [
-                "custommachinerycreate.mixins.json"
+                "custommachinerybotania.mixins.json"
         ]
     }
 }
@@ -37,6 +37,8 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
 
     // botania
+    modLocalRuntime "vazkii.patchouli:Patchouli:${minecraft_version}-76"
+    modLocalRuntime "top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0"
     modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
     modLocalRuntime "vazkii.botania:Botania:${project.botania_version}-FORGE"
 
@@ -70,7 +72,8 @@ processResources {
                 "icon": project.icon,
                 "minecraft_version": project.minecraft_version,
                 "architectury_version": project.architectury_version,
-                "custommachinery_version": project.custommachinery_version
+                "custommachinery_version": project.custommachinery_version,
+                "botania_version": project.botania_version
     }
 }
 
