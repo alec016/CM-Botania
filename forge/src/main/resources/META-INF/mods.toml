@@ -1,0 +1,49 @@
+modLoader = "javafml"
+loaderVersion = "[40,)"
+issueTrackerURL = "${issues}"
+license = "${license}"
+
+[[mods]]
+modId = "${modid}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+authors = "${author}"
+description = '''
+${mod_description}
+'''
+logoFile = "${icon}"
+
+[[dependencies.custommachinerybotania]]
+modId = "forge"
+mandatory = true
+versionRange = "[40,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.custommachinerybotania]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[${minecraft_version},)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.custommachinerybotania]]
+modId = "architectury"
+mandatory = true
+versionRange = "[${architectury_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.custommachinerybotania]]
+modId = "custommachinery"
+mandatory = true
+versionRange = "[${custommachinery_version},)"
+ordering = "AFTER"
+side = "BOTH"
+
+[[dependencies.custommachinerybotania]]
+modId = "create"
+mandatory = true
+versionRange = "[${create_forge_version},)"
+ordering = "NONE"
+side = "BOTH"

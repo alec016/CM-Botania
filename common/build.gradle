@@ -1,0 +1,53 @@
+architectury {
+    common(rootProject.enabled_platforms.split(","))
+}
+
+repositories {
+    // mavens for Create Fabric and dependencies
+    maven { url = "https://api.modrinth.com/maven" } // LazyDFU
+    maven { url = "https://maven.terraformersmc.com/releases/" } // Mod Menu
+    maven { url = "https://mvn.devos.one/snapshots/" } // Create Fabric, Porting Lib, Forge Tags, Milk Lib, Registrate Fabric
+    maven { url = "https://cursemaven.com" } // Forge Config API Port
+    maven { url = "https://maven.cafeteria.dev/releases" } // Fake Player API
+    maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
+    maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
+    maven {
+        name = 'BlameJared Maven'
+        url = 'https://maven.blamejared.com'
+    }
+    maven {
+        name = "C4"
+        url = "https://maven.theillusivec4.top/"
+    }
+    maven {
+        name = "Unascribed"
+        url "https://repo.unascribed.com" // for ears
+        content {
+            includeGroup "com.unascribed"
+        }
+    }
+    maven {
+        name "entity reach"
+        url "https://maven.jamieswhiteshirt.com/libs-release/"
+    }
+}
+
+dependencies {
+    // We depend on fabric loader here to use the fabric @Environment annotations and get the mixin dependencies
+    // Do NOT use other classes from fabric loader
+    modImplementation("net.fabricmc:fabric-loader:${project.fabric_loader_version}")
+    modApi("dev.architectury:architectury:${project.architectury_version}")
+
+    // Botania
+    modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
+
+    // Custom Machinery
+    modApi "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
+    modCompileOnly "frinn.custommachinery:CustomMachinery-fabric:${project.minecraft_version}-${project.custommachinery_version}"
+
+    //KubeJS common module
+    modLocalRuntime modCompileOnly("dev.latvian.mods:kubejs:${project.kubejs_version}")
+
+    //Crafttweaker common module
+    modLocalRuntime modCompileOnly("com.blamejared.crafttweaker:CraftTweaker-common-${project.minecraft_version}:${project.ct_version}")
+}

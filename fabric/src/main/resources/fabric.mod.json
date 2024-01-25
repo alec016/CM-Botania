@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "custommachinerybotania",
+  "version": "${version}",
+  "name": "Custom Machinery Botania",
+  "description": "Custom Machinery addon for Botania",
+  "authors": [
+    "${author}"
+  ],
+  "contact": {
+    "homepage": "${homepage}",
+    "sources": "${github}"
+  },
+  "license": "${license}",
+  "icon": "${icon}",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "al.alec.custommachinerybotania.fabric.CustomMachineryBotaniaFabric"
+    ]
+  },
+  "mixins": [
+    "custommachinerybotania.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=${minecraft_version}",
+    "architectury": ">=${architectury_version}",
+    "custommachinery": ">=${custommachinery_version}",
+    "java": ">=17"
+  }
+}
