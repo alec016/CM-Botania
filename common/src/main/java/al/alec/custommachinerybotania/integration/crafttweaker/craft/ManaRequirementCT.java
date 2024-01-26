@@ -13,16 +13,16 @@ import org.openzen.zencode.java.*;
 public class ManaRequirementCT {
 
   @ZenCodeType.Method
-  public static CustomCraftRecipeCTBuilder requireMana(CustomCraftRecipeCTBuilder builder, long mana) {
+  public static CustomCraftRecipeCTBuilder requireMana(CustomCraftRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.INPUT, mana);
   }
 
   @ZenCodeType.Method
-  public static CustomCraftRecipeCTBuilder produceMana(CustomCraftRecipeCTBuilder builder, long mana) {
+  public static CustomCraftRecipeCTBuilder produceMana(CustomCraftRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.OUTPUT, mana);
   }
 
-  private static CustomCraftRecipeCTBuilder addManaRequirement(CustomCraftRecipeCTBuilder builder, RequirementIOMode mode, long mana) {
+  private static CustomCraftRecipeCTBuilder addManaRequirement(CustomCraftRecipeCTBuilder builder, RequirementIOMode mode, int mana) {
     if (mana < 0)
       return builder.error("Mana value cannot be negative");
     return builder.addRequirement(new ManaRequirement(mode, mana));

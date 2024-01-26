@@ -1,8 +1,10 @@
 package al.alec.custommachinerybotania.components;
 
+import al.alec.custommachinerybotania.client.integration.jei.mana.*;
 import fr.frinn.custommachinery.api.codec.NamedCodec;
 import fr.frinn.custommachinery.api.component.*;
 import fr.frinn.custommachinery.api.network.*;
+import fr.frinn.custommachinery.common.init.*;
 import fr.frinn.custommachinery.common.network.syncable.*;
 import fr.frinn.custommachinery.impl.component.AbstractMachineComponent;
 import fr.frinn.custommachinery.impl.component.config.SideConfig;
@@ -10,17 +12,20 @@ import al.alec.custommachinerybotania.Registration;
 import java.util.*;
 import java.util.function.*;
 import net.minecraft.nbt.*;
+import vazkii.botania.api.*;
+import vazkii.botania.api.mana.*;
+import vazkii.botania.common.handler.*;
 
 public class ManaMachineComponent extends AbstractMachineComponent implements ITickableComponent, ISerializableComponent, ISyncableStuff, IComparatorInputComponent, ISideConfigComponent, IDumpComponent {
-  private long mana;
+  private int mana;
   private final SideConfig config;
-  private final long capacity, maxIn, maxOut;
+  private final int capacity, maxIn, maxOut;
 
   public ManaMachineComponent(IMachineComponentManager manager) {
-    this(manager, SideConfig.Template.DEFAULT_ALL_BOTH, 10000L, 10000L, 10000L);
+    this(manager, SideConfig.Template.DEFAULT_ALL_BOTH, 10000, 10000, 10000);
   }
 
-  public ManaMachineComponent(IMachineComponentManager manager, SideConfig.Template config, long capacity, long maxInput, long maxOutput) {
+  public ManaMachineComponent(IMachineComponentManager manager, SideConfig.Template config, int capacity, int maxInput, int maxOutput) {
     super(manager, ComponentIOMode.BOTH);
     this.config = config.build(this);
     this.capacity = capacity;
@@ -28,18 +33,34 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
     this.maxOut = maxOutput;
   }
 
-  public long getMana () {
+  @Override
+  public void init() {
+//    if (!ManaNetworkHandler.instance.isPoolIn(getManager().getTile().getLevel(), (ManaPool) getManager().getTile()) && !getManager().getTile().isRemoved()) {
+      BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
+        (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.ADD
+      );
+//    }
+  }
+
+  @Override
+  public void onRemoved() {
+    BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
+      (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.REMOVE
+    );
+  }
+
+  public int getMana () {
     return this.mana;
   }
 
-  public void setMana (long mana) {
+  public void setMana (int mana) {
     this.mana = mana;
     getManager().markDirty();
   }
 
-  public long receiveMana (long maxReceive, boolean simulate) {
+  public int receiveMana (int maxReceive, boolean simulate) {
     if (this.getMaxInput() <= 0) return 0;
-    long manaReceived = Math.min(this.getCapacity() - this.getMana(), Math.min(this.getMaxInput(), maxReceive));
+    int manaReceived = Math.min(this.getCapacity() - this.getMana(), Math.min(this.getMaxInput(), maxReceive));
     if (!simulate && manaReceived > 0) {
       this.setMana(this.getMana() + manaReceived);
       this.getManager().markDirty();
@@ -47,9 +68,9 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
     return manaReceived;
   }
 
-  public long extractMana (long maxExtract, boolean simulate) {
+  public int extractMana (int maxExtract, boolean simulate) {
     if (this.getMaxOutput() <= 0) return 0;
-    long manaExtracted = Math.min(this.getMana(), Math.min(this.getMaxOutput(), maxExtract));
+    int manaExtracted = Math.min(this.getMana(), Math.min(this.getMaxOutput(), maxExtract));
     if (!simulate && manaExtracted > 0) {
       this.setMana(this.getMana() - manaExtracted);
       this.getManager().markDirty();
@@ -65,20 +86,20 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
 
   @Override
   public void deserialize(CompoundTag nbt) {
-    if (nbt.contains("mana", Tag.TAG_LONG))
-      this.mana = Math.min(nbt.getLong("mana"), this.capacity);
+    if (nbt.contains("mana", Tag.TAG_INT))
+      this.mana = Math.min(nbt.getInt("mana"), this.capacity);
     if (nbt.contains("config"))
       this.config.deserialize(nbt.get("config"));
   }
 
   @Override
   public void getStuffToSync(Consumer<ISyncable<?, ?>> container) {
-    container.accept(LongSyncable.create(() -> this.mana, mana -> this.mana = mana));
+    container.accept(IntegerSyncable.create(() -> this.mana, mana -> this.mana = mana));
     container.accept(SideConfigSyncable.create(this::getConfig, this.config::set));
   }
   @Override
   public void dump(List<String> ids) {
-    setMana(0L);
+    setMana(0);
   }
 
   @Override
@@ -90,15 +111,15 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
     return (double)this.mana / this.capacity;
   }
 
-  public long getCapacity () {
+  public int getCapacity () {
     return this.capacity;
   }
 
-  public long getMaxInput () {
+  public int getMaxInput () {
     return maxIn;
   }
 
-  public long getMaxOutput () {
+  public int getMaxOutput () {
     return maxOut;
   }
 
@@ -117,35 +138,22 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
     return "mana";
   }
 
-  @Override
-  public void serverTick() {
-    this.getManager().markDirty();
-  }
-
-  @Override
-  public void init() {
-  }
-
-  @Override
-  public void onRemoved() {
-  }
-
   public static class Template implements IMachineComponentTemplate<ManaMachineComponent> {
 
     public static final NamedCodec<Template> CODEC = NamedCodec.record(templateInstance ->
       templateInstance.group(
         SideConfig.Template.CODEC.optionalFieldOf("config", SideConfig.Template.DEFAULT_ALL_BOTH).forGetter(template -> template.config),
-        NamedCodec.longRange(1, Long.MAX_VALUE).fieldOf("capacity").forGetter(template -> template.capacity),
-        NamedCodec.longRange(0, Long.MAX_VALUE).optionalFieldOf("maxInput").forGetter(template -> Optional.of(template.maxInput)),
-        NamedCodec.longRange(0, Long.MAX_VALUE).optionalFieldOf("maxOutput").forGetter(template -> Optional.of(template.maxOutput))
+        NamedCodec.intRange(1, Integer.MAX_VALUE).fieldOf("capacity").forGetter(template -> template.capacity),
+        NamedCodec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("maxInput").forGetter(template -> Optional.of(template.maxInput)),
+        NamedCodec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("maxOutput").forGetter(template -> Optional.of(template.maxOutput))
       ).apply(templateInstance, (config, capacity, maxIn, maxOut) -> new Template(config, capacity, maxIn.orElse(capacity), maxOut.orElse(capacity))), "Mana machine component"
     );
 
-    private final long capacity, maxInput, maxOutput;
+    private final int capacity, maxInput, maxOutput;
 
     private final SideConfig.Template config;
 
-    private Template(SideConfig.Template config, long capacity, long maxInput, long maxOutput) {
+    private Template(SideConfig.Template config, int capacity, int maxInput, int maxOutput) {
       this.config = config;
       this.capacity = capacity;
       this.maxInput = maxInput;
@@ -159,12 +167,12 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
 
     @Override
     public String getId() {
-      return "contraption";
+      return "";
     }
 
     @Override
     public boolean canAccept(Object ingredient, boolean isInput, IMachineComponentManager manager) {
-      return false;
+      return ingredient instanceof Mana;
     }
 
     @Override

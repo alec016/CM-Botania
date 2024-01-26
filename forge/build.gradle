@@ -10,9 +10,7 @@ architectury {
 
 loom {
     forge {
-        mixinConfigs = [
-                "custommachinerybotania.mixins.json"
-        ]
+        mixinConfig "custommachinerybotania.mixins.json"
     }
 }
 

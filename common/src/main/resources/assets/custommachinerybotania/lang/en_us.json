@@ -5,5 +5,9 @@
   "custommachinerybotania.jei.ingredient.mana.pertick.input": "Consume mana %s @ %s/t",
   "custommachinerybotania.jei.ingredient.mana.pertick.output": "Produce mana %s @ %s/t",
   "custommachinerybotania.jei.ingredient.mana.input": "Consume %s mana",
-  "custommachinerybotania.jei.ingredient.mana.output": "Produce %s mana"
+  "custommachinerybotania.jei.ingredient.mana.output": "Produce %s mana",
+  "custommachinerybotania.requirements.mana.error.input": "Not enough mana, %s needed but only %s found !",
+  "custommachinerybotania.requirements.mana.error.output": "Not enough space for storing %s mana!",
+  "custommachinerybotania.requirements.manapertick.error.input": "Not enough mana, %s needed but only %s found !",
+  "custommachinerybotania.requirements.manapertick.error.output": "Not enough space for storing %s mana!"
 }

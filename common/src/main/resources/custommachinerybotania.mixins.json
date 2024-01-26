@@ -4,6 +4,7 @@
   "package": "al.alec.custommachinerybotania.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "MachineTileMixin",
     "CustomCraftRecipeJSBuilderMixin",
     "CustomMachineRecipeBuilderJSMixin"
   ],

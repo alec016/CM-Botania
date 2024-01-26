@@ -12,26 +12,26 @@ import org.openzen.zencode.java.*;
 public class ManaRequirementCT {
 
   @ZenCodeType.Method
-  public static CustomMachineRecipeCTBuilder requireMana(CustomMachineRecipeCTBuilder builder, long mana) {
+  public static CustomMachineRecipeCTBuilder requireMana(CustomMachineRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.INPUT, mana, false);
   }
 
   @ZenCodeType.Method
-  public static CustomMachineRecipeCTBuilder requireManaPerTick(CustomMachineRecipeCTBuilder builder, long mana) {
+  public static CustomMachineRecipeCTBuilder requireManaPerTick(CustomMachineRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.INPUT, mana, true);
   }
 
   @ZenCodeType.Method
-  public static CustomMachineRecipeCTBuilder produceMana(CustomMachineRecipeCTBuilder builder, long mana) {
+  public static CustomMachineRecipeCTBuilder produceMana(CustomMachineRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.OUTPUT, mana, false);
   }
 
   @ZenCodeType.Method
-  public static CustomMachineRecipeCTBuilder produceManaPerTick(CustomMachineRecipeCTBuilder builder, long mana) {
+  public static CustomMachineRecipeCTBuilder produceManaPerTick(CustomMachineRecipeCTBuilder builder, int mana) {
     return addManaRequirement(builder, RequirementIOMode.OUTPUT, mana, true);
   }
 
-  private static CustomMachineRecipeCTBuilder addManaRequirement(CustomMachineRecipeCTBuilder builder, RequirementIOMode mode, long mana, boolean perTick) {
+  private static CustomMachineRecipeCTBuilder addManaRequirement(CustomMachineRecipeCTBuilder builder, RequirementIOMode mode, int mana, boolean perTick) {
     if (mana < 0)
       return builder.error("Mana value cannot be negative");
     return builder.addRequirement(perTick ? new ManaRequirementPerTick(mode, mana) : new ManaRequirement(mode, mana));

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "custommachinerybotania",
-  "version": "${version}",
+  "version": "1.0.0",
   "name": "Custom Machinery Botania",
   "description": "Custom Machinery addon for Botania",
   "authors": [
