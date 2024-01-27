@@ -1,14 +1,13 @@
 package al.alec.custommachinerybotania.client.integration.jei.mana;
 
 import al.alec.custommachinerybotania.client.integration.jei.CustomIngredientTypes;
+import al.alec.custommachinerybotania.client.render.element.*;
 import al.alec.custommachinerybotania.guielement.*;
 import com.mojang.blaze3d.vertex.*;
 import fr.frinn.custommachinery.api.integration.jei.*;
-import fr.frinn.custommachinery.client.*;
 import fr.frinn.custommachinery.common.util.*;
 import java.util.*;
 import mezz.jei.api.ingredients.*;
-import net.minecraft.client.gui.*;
 import net.minecraft.network.chat.*;
 import net.minecraft.world.item.*;
 import org.jetbrains.annotations.*;
@@ -26,7 +25,7 @@ public class ManaJEIIngredientRenderer extends JEIIngredientRenderer<Mana, ManaG
 
     @Override
     public int getWidth() {
-        return this.element.getWidth() - 2;
+        return this.element.getWidth() - 4;
     }
 
     @Override
@@ -35,16 +34,15 @@ public class ManaJEIIngredientRenderer extends JEIIngredientRenderer<Mana, ManaG
     }
 
     @Override
-    public void render(PoseStack matrix, @Nullable Mana ingredient) {
-        int width = this.element.getWidth();
-        int height = this.element.getHeight();
+    public void render(@NotNull PoseStack matrix, @Nullable Mana ingredient) {
+        int width = this.element.getWidth() - 4;
+        int height = this.element.getHeight() - 2;
 
-        ClientHandler.bindTexture(this.element.getFilledTexture());
-        GuiComponent.blit(matrix, -1, -1,0, 0, width, height, width, height);
+        ManaGuiElementWidget.renderMana(matrix, height, 0, 0, width, height);
     }
 
     @Override
-    public List<Component> getTooltip(Mana ingredient, TooltipFlag iTooltipFlag) {
+    public @NotNull List<Component> getTooltip(Mana ingredient, @NotNull TooltipFlag iTooltipFlag) {
         List<Component> tooltips = new ArrayList<>();
         String amount = Utils.format(ingredient.getAmount());
         if(ingredient.isPerTick())

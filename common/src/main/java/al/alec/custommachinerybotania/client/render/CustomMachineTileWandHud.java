@@ -1,22 +1,22 @@
 package al.alec.custommachinerybotania.client.render;
 
+import al.alec.custommachinerybotania.*;
 import al.alec.custommachinerybotania.Registration;
-import al.alec.custommachinerybotania.components.*;
 import com.mojang.blaze3d.systems.*;
 import com.mojang.blaze3d.vertex.*;
-import fr.frinn.custommachinery.api.component.*;
 import fr.frinn.custommachinery.common.init.*;
 import net.minecraft.client.*;
+import net.minecraft.resources.*;
 import net.minecraft.world.item.*;
 import org.lwjgl.opengl.*;
 import vazkii.botania.api.*;
 import vazkii.botania.api.block.*;
 import vazkii.botania.api.mana.*;
 import vazkii.botania.client.core.helper.*;
-import vazkii.botania.client.gui.*;
 import vazkii.botania.common.item.*;
 
 public class CustomMachineTileWandHud implements WandHUD {
+  private static final ResourceLocation manaBar = new ResourceLocation(CustomMachineryBotania.MODID, "textures/mana_hud.png");
   private final CustomMachineTile pool;
 
   public CustomMachineTileWandHud(CustomMachineTile pool) {
@@ -25,8 +25,8 @@ public class CustomMachineTileWandHud implements WandHUD {
 
   @Override
   public void renderHUD(PoseStack ms, Minecraft mc) {
-    ItemStack poolStack = new ItemStack(pool.getBlockState().getBlock());
-    String name = poolStack.getHoverName().getString();
+    ItemStack poolStack = CustomMachineItem.makeMachineItem(pool.getId());
+    String name = pool.getMachine().getName().getString();
 
     int centerX = mc.getWindow().getGuiScaledWidth() / 2;
     int centerY = mc.getWindow().getGuiScaledHeight() / 2;
@@ -43,11 +43,15 @@ public class CustomMachineTileWandHud implements WandHUD {
     int arrowU = pool
       .getComponentManager()
       .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
-      .map(ManaMachineComponent::getMode)
-      .map(ComponentIOMode::isOutput)
-      .orElse(false) ? 22 : 0;
+      .map(component -> switch(component.getMode()) {
+        case INPUT -> 0;
+        case OUTPUT -> 22;
+        case BOTH -> 44;
+        case NONE -> 66;
+      }).orElse(66);
+
     int arrowV = 38;
-    RenderSystem.setShaderTexture(0, HUDHandler.manaBar);
+    RenderSystem.setShaderTexture(0, manaBar);
     RenderHelper.drawTexturedModalRect(ms, centerX - 11, centerY + 30, arrowU, arrowV, 22, 15);
     RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 

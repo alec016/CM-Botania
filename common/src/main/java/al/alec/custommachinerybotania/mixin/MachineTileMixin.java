@@ -81,9 +81,15 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
 
   @Override
   public void receiveMana(int mana) {
-    this.getComponentManager()
-      .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
-      .map(component -> component.receiveMana(mana));
+    if (mana >= 0) {
+      this.getComponentManager()
+        .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
+        .map(component -> component.receiveMana(mana));
+    } else {
+      this.getComponentManager()
+        .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
+        .map(component -> component.extractMana(-mana));
+    }
   }
 
   @Override
@@ -123,6 +129,14 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
   @Override
   public boolean onUsedByWand(@Nullable Player player, ItemStack stack, Direction side) {
     if (player == null || player.isShiftKeyDown()) {
+      this.getComponentManager()
+        .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
+        .map(component -> switch (component.getMode()) {
+          case INPUT -> component.setMode(ComponentIOMode.OUTPUT);
+          case OUTPUT -> component.setMode(ComponentIOMode.BOTH);
+          case BOTH -> component.setMode(ComponentIOMode.NONE);
+          case NONE -> component.setMode(ComponentIOMode.INPUT);
+        });
       VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
     }
     return true;

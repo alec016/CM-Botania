@@ -28,7 +28,7 @@ public class ManaIngredientWrapper implements IJEIIngredientWrapper<Mana> {
     if(!(element instanceof ManaGuiElement manaElement) || element.getType() != Registration.MANA_GUI_ELEMENT.get())
       return false;
 
-    builder.addSlot(roleFromMode(this.mode), element.getX() - xOffset + 1, element.getY() - yOffset + 1)
+    builder.addSlot(roleFromMode(this.mode), element.getX() - xOffset + 2, element.getY() - yOffset)
       .setCustomRenderer(CustomIngredientTypes.MANA, new ManaJEIIngredientRenderer(manaElement))
       .addIngredient(CustomIngredientTypes.MANA, this.mana)
       .addTooltipCallback((recipeSlotView, tooltip) -> {
