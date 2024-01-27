@@ -5,32 +5,35 @@ import al.alec.custommachinerybotania.components.*;
 import fr.frinn.custommachinery.api.component.*;
 import fr.frinn.custommachinery.api.machine.*;
 import fr.frinn.custommachinery.common.init.*;
-import fr.frinn.custommachinery.common.util.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 import net.minecraft.core.*;
+import net.minecraft.world.entity.player.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.*;
+import org.jetbrains.annotations.*;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.*;
 import vazkii.botania.api.*;
+import vazkii.botania.api.block.*;
+import vazkii.botania.api.internal.*;
 import vazkii.botania.api.mana.*;
 import vazkii.botania.common.handler.*;
 
 @Mixin({ CustomMachineTile.class })
-public abstract class MachineTileMixin extends MachineTile implements ManaPool {
+public abstract class MachineTileMixin extends MachineTile implements ManaPool, Wandable {
 
-  public MachineTileMixin(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
-    super(type, pos, blockState);
+  public MachineTileMixin(BlockPos pos, BlockState blockState) {
+    super(fr.frinn.custommachinery.common.init.Registration.CUSTOM_MACHINE_TILE.get(), pos, blockState);
   }
 
   @Override
   public void setRemoved() {
     super.setRemoved();
-    BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(this, ManaBlockType.POOL, ManaNetworkAction.REMOVE);
+    if (!ManaNetworkHandler.instance.isPoolIn(level, this) && !isRemoved()) {
+      BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(this, ManaBlockType.POOL, ManaNetworkAction.REMOVE);
+    }
   }
 
   @Unique
@@ -42,14 +45,12 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool {
 
   @Inject(method="clientTick", at=@At("HEAD"))
   private static void clientTick(Level level, BlockPos pos, BlockState state, CustomMachineTile self, CallbackInfo ci) {
-    MachineTileMixin tile = (MachineTileMixin) (Object) self;
-    tile.cmb$initManaNetwork();
+    ((MachineTileMixin) (Object) self).cmb$initManaNetwork();
   }
 
   @Inject(method="serverTick", at=@At("HEAD"))
   private static void serverTick(Level level, BlockPos pos, BlockState state, CustomMachineTile self, CallbackInfo ci) {
-    MachineTileMixin tile = (MachineTileMixin) (Object) self;
-    tile.cmb$initManaNetwork();
+    ((MachineTileMixin) (Object) self).cmb$initManaNetwork();
   }
 
   @Override
@@ -72,28 +73,26 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool {
 
   @Override
   public boolean isFull() {
-    AtomicBoolean full = new AtomicBoolean(true);
-    this.getComponentManager()
+    return this.getComponentManager()
       .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
-      .ifPresent(component -> full.set(component.getCapacity() != component.getMana()));
-    return full.get();
+      .map(ManaMachineComponent::isFull)
+      .orElse(false);
   }
 
   @Override
   public void receiveMana(int mana) {
     this.getComponentManager()
       .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
-      .ifPresent(component -> {
-        component.receiveMana(mana, false);
-//        if (mana > 0) {
-//          getManaReceiverLevel().blockEvent(tile.getBlockPos(), tile.getBlockState().getBlock(), SPARKLE_EVENT, 0);
-//        }
-      });
+      .map(component -> component.receiveMana(mana));
   }
 
   @Override
   public boolean canReceiveManaFromBursts() {
-    return true;
+    return this.getComponentManager()
+      .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
+      .map(ManaMachineComponent::getMode)
+      .map(ComponentIOMode::isInput)
+      .orElse(false);
   }
 
   @Override
@@ -115,10 +114,17 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool {
 
   @Override
   public int getMaxMana() {
-    CMLogger.INSTANCE.info("MachineTile$receiveMana");
-    AtomicInteger capacity = new AtomicInteger();
-    this.getComponentManager().getComponent(Registration.MANA_MACHINE_COMPONENT.get())
-      .ifPresent(component -> capacity.set(component.getCapacity()));
-    return capacity.get();
+    return this.getComponentManager()
+      .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
+      .map(ManaMachineComponent::getCapacity)
+      .orElse(0);
+  }
+
+  @Override
+  public boolean onUsedByWand(@Nullable Player player, ItemStack stack, Direction side) {
+    if (player == null || player.isShiftKeyDown()) {
+      VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
+    }
+    return true;
   }
 }

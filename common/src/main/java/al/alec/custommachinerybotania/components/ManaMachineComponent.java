@@ -58,6 +58,10 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
     getManager().markDirty();
   }
 
+  public int receiveMana(int receive) {
+    return receiveMana(receive, false);
+  }
+
   public int receiveMana (int maxReceive, boolean simulate) {
     if (this.getMaxInput() <= 0) return 0;
     int manaReceived = Math.min(this.getCapacity() - this.getMana(), Math.min(this.getMaxInput(), maxReceive));
@@ -109,6 +113,10 @@ public class ManaMachineComponent extends AbstractMachineComponent implements IT
 
   public double getFillPercent() {
     return (double)this.mana / this.capacity;
+  }
+
+  public boolean isFull() {
+    return this.capacity == this.mana;
   }
 
   public int getCapacity () {

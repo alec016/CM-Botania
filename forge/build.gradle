@@ -38,6 +38,7 @@ dependencies {
     modLocalRuntime "vazkii.patchouli:Patchouli:${minecraft_version}-76"
     modLocalRuntime "top.theillusivec4.curios:curios-forge:1.19.2-5.1.1.0"
     modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
+    modApi "vazkii.botania:Botania:${project.botania_version}-FORGE"
     modLocalRuntime "vazkii.botania:Botania:${project.botania_version}-FORGE"
 
     // JEI 10
@@ -46,6 +47,7 @@ dependencies {
     modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}") {transitive = false}
 
     // Custom Machinery
+    modApi "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
     modLocalRuntime "frinn.custommachinery:CustomMachinery-forge:${project.minecraft_version}-${project.custommachinery_version}"
 
     //KubeJS
