@@ -112,20 +112,21 @@ unifiedPublishing {
         gameLoaders = ["forge"]
         mainPublication remapJar
 
-//        var CURSE_API_KEY = System.getenv("CURSEFORGE")
-//        if (CURSE_API_KEY != null) {
-//            curseforge {
-//                token = CURSE_API_KEY
-//                id = "860747"
-//                gameVersions.addAll "Java 17"
-//                relations {
-//                    depends "architectury-api"
-//                    depends "cloth-config"
-//                    depends "custom-machinery"
-//                    optional "crafttweaker"
-//                    optional "kubejs"
-//                }
-//            }
-//        }
+        var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
+        if (CURSE_API_KEY != null) {
+            curseforge {
+                token = CURSE_API_KEY
+                id = "967739"
+                gameVersions.addAll "Java 17"
+                relations {
+                    depends "architectury-api"
+                    depends "cloth-config"
+                    depends "custom-machinery"
+                    depends "botania"
+                    optional "crafttweaker"
+                    optional "kubejs"
+                }
+            }
+        }
     }
 }

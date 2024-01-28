@@ -9,7 +9,7 @@ import vazkii.botania.api.block.*;
 import vazkii.botania.common.block.block_entity.*;
 
 @Mixin(value = { BotaniaBlockEntities.class}, remap = false)
-public class BotaniaBlockEntitiesMixin {
+public abstract class BotaniaBlockEntitiesMixin {
 
   @Inject(method="registerWandHudCaps", at=@At("TAIL"))
   private static void registerWandHudCaps (BotaniaBlockEntities.BECapConsumer<WandHUD> consumer, CallbackInfo ci) {

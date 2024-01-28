@@ -26,6 +26,13 @@ repositories {
     maven { url = "https://maven.jamieswhiteshirt.com/libs-release" } // Reach Entity Attributes
     maven { url = "https://jitpack.io/" } // Mixin Extras, Fabric ASM
     maven {
+        url = "https://maven.terraformersmc.com/" // for trinkets and emi
+    }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://maven.ladysnake.org/releases'
+    }
+    maven {
         name "entity reach"
         url "https://maven.jamieswhiteshirt.com/libs-release/"
     }
@@ -40,11 +47,11 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
 
     // botania
+//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.0-beta.1"
+//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.0-beta.1"
+    modLocalRuntime ("dev.emi:trinkets:3.4.0") { transitive = false }
     modLocalRuntime "vazkii.patchouli:Patchouli:${project.minecraft_version}-76-FABRIC"
-    modImplementation "curse.maven:botania-fabric-421839:4557910"
-    modLocalRuntime "curse.maven:botania-fabric-421839:4557910"
-//    modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
-//    modLocalRuntime "vazkii.botania:Botania:${project.botania_version}-FABRIC"
+    modImplementation "vazkii.botania:Botania:${project.botania_version}-FABRIC"
 
     // JEI
     modLocalRuntime modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
@@ -82,7 +89,8 @@ processResources {
                 "icon": project.icon,
                 "minecraft_version": project.minecraft_version,
                 "architectury_version": project.architectury_version,
-                "custommachinery_version": project.custommachinery_version
+                "custommachinery_version": project.custommachinery_version,
+                "botania_version": project.botania_version
     }
 }
 
@@ -121,20 +129,21 @@ unifiedPublishing {
         gameLoaders = ["fabric"]
         mainPublication remapJar
 
-//        var CURSE_API_KEY = System.getenv("CURSEFORGE")
-//        if (CURSE_API_KEY != null) {
-//            curseforge {
-//                token = CURSE_API_KEY
-//                id = "860747"
-//                gameVersions.addAll "Java 17"
-//                relations {
-//                    depends "architectury-api"
-//                    depends "cloth-config"
-//                    depends "custom-machinery"
-//                    optional "crafttweaker"
-//                    optional "kubejs"
-//                }
-//            }
-//        }
+        var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
+        if (CURSE_API_KEY != null) {
+            curseforge {
+                token = CURSE_API_KEY
+                id = "967739"
+                gameVersions.addAll "Java 17"
+                relations {
+                    depends "architectury-api"
+                    depends "cloth-config"
+                    depends "custom-machinery"
+                    depends "botania"
+                    optional "crafttweaker"
+                    optional "kubejs"
+                }
+            }
+        }
     }
 }

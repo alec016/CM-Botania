@@ -27,6 +27,7 @@
     "minecraft": ">=${minecraft_version}",
     "architectury": ">=${architectury_version}",
     "custommachinery": ">=${custommachinery_version}",
+    "botania": ">=${botania_version}",
     "java": ">=17"
   }
 }
