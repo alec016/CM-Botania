@@ -94,7 +94,7 @@ public class ManaGuiElementWidget extends TexturedGuiElementWidget<ManaGuiElemen
           int maskTop = TEXTURE_SIZE - height;
           int maskRight = TEXTURE_SIZE - width;
 
-          drawTextureWithMasking(matrix, x, y, sprite, maskTop, maskRight, 100);
+          drawTextureWithMasking(matrix, x, y, sprite, maskTop, maskRight);
         }
       }
     }
@@ -102,7 +102,7 @@ public class ManaGuiElementWidget extends TexturedGuiElementWidget<ManaGuiElemen
     RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
   }
 
-  private static void drawTextureWithMasking(Matrix4f matrix, float xCoord, float yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight, float zLevel) {
+  private static void drawTextureWithMasking(Matrix4f matrix, float xCoord, float yCoord, TextureAtlasSprite textureSprite, int maskTop, int maskRight) {
     float uMin = textureSprite.getU0();
     float uMax = textureSprite.getU1();
     float vMin = textureSprite.getV0();
@@ -110,13 +110,15 @@ public class ManaGuiElementWidget extends TexturedGuiElementWidget<ManaGuiElemen
     uMax = uMax - (maskRight / 16F * (uMax - uMin));
     vMax = vMax - (maskTop / 16F * (vMax - vMin));
 
-    Tesselator tessellator = Tesselator.getInstance();
-    BufferBuilder bufferBuilder = tessellator.getBuilder();
+    float zLevel = 100;
+
+    Tesselator tesselator = Tesselator.getInstance();
+    BufferBuilder bufferBuilder = tesselator.getBuilder();
     bufferBuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX);
     bufferBuilder.vertex(matrix, xCoord, yCoord + 16, zLevel).uv(uMin, vMax).endVertex();
     bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + 16, zLevel).uv(uMax, vMax).endVertex();
     bufferBuilder.vertex(matrix, xCoord + 16 - maskRight, yCoord + maskTop, zLevel).uv(uMax, vMin).endVertex();
-    bufferBuilder.vertex(matrix, xCoord, yCoord + maskTop, zLevel).uv(uMin, vMin).endVertex();
-    tessellator.end();
+    bufferBuilder.vertex(matrix, xCoord, yCoord + maskTop,zLevel).uv(uMin, vMin).endVertex();
+    tesselator.end();
   }
 }

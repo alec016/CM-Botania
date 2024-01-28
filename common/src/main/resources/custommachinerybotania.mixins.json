@@ -6,11 +6,12 @@
   "mixins": [
     "BotaniaBlockEntitiesMixin",
     "CustomCraftRecipeJSBuilderMixin",
+    "CustomMachineBlockMixin",
     "CustomMachineRecipeBuilderJSMixin",
     "MachineTileMixin",
-    "ManaSpreaderBlockEntityAccessor",
     "ManaSpreaderBlockEntity$WandHudAccessor",
-    "ManaSpreaderBlockEntity$WandHudMixin"
+    "ManaSpreaderBlockEntity$WandHudMixin",
+    "ManaSpreaderBlockEntityAccessor"
   ],
   "client": [
   ],

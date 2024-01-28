@@ -4,6 +4,7 @@ import al.alec.custommachinerybotania.Registration;
 import al.alec.custommachinerybotania.components.*;
 import fr.frinn.custommachinery.api.component.*;
 import fr.frinn.custommachinery.api.machine.*;
+import fr.frinn.custommachinery.common.component.*;
 import fr.frinn.custommachinery.common.init.*;
 import java.util.*;
 import net.minecraft.core.*;
@@ -23,6 +24,14 @@ import vazkii.botania.common.handler.*;
 
 @Mixin({ CustomMachineTile.class })
 public abstract class MachineTileMixin extends MachineTile implements ManaPool, Wandable {
+
+  @Shadow
+  public abstract MachineComponentManager getComponentManager();
+
+  @Unique
+  private int cmb$ticks = 0;
+  @Unique
+  private boolean cmb$sendPacket = false;
 
   public MachineTileMixin(BlockPos pos, BlockState blockState) {
     super(fr.frinn.custommachinery.common.init.Registration.CUSTOM_MACHINE_TILE.get(), pos, blockState);
@@ -51,6 +60,13 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
   @Inject(method="serverTick", at=@At("HEAD"))
   private static void serverTick(Level level, BlockPos pos, BlockState state, CustomMachineTile self, CallbackInfo ci) {
     ((MachineTileMixin) (Object) self).cmb$initManaNetwork();
+
+    if (((MachineTileMixin) (Object) self).cmb$sendPacket && ((MachineTileMixin) (Object) self).cmb$ticks % 10 == 0) {
+      VanillaPacketDispatcher.dispatchTEToNearbyPlayers(self);
+      ((MachineTileMixin) (Object) self).cmb$sendPacket = false;
+    }
+
+    ((MachineTileMixin) (Object) self).cmb$ticks++;
   }
 
   @Override
@@ -85,10 +101,12 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
       this.getComponentManager()
         .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
         .map(component -> component.receiveMana(mana));
+      this.getComponentManager().markDirty();
     } else {
       this.getComponentManager()
         .getComponent(Registration.MANA_MACHINE_COMPONENT.get())
         .map(component -> component.extractMana(-mana));
+      this.getComponentManager().markDirty();
     }
   }
 
@@ -137,6 +155,7 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
           case BOTH -> component.setMode(ComponentIOMode.NONE);
           case NONE -> component.setMode(ComponentIOMode.INPUT);
         });
+      this.getComponentManager().markDirty();
       VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
     }
     return true;

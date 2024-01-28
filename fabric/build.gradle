@@ -64,8 +64,9 @@ dependencies {
     }
 
     // Custom Machinery
-    modApi "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
-    modLocalRuntime "frinn.custommachinery:CustomMachinery-fabric:${project.minecraft_version}-${project.custommachinery_version}"
+    modImplementation "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
+    modImplementation "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
+    modImplementation "frinn.custommachinery:CustomMachinery-fabric:${project.minecraft_version}-${project.custommachinery_version}"
 
     //KubeJS
     modLocalRuntime modCompileOnly("dev.latvian.mods:kubejs-fabric:${project.kubejs_version}")

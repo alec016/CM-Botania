@@ -46,8 +46,8 @@ dependencies {
     modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
 
     // Custom Machinery
-    modApi "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
-    modApi "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
+    modImplementation "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
+    modImplementation "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
 
     //KubeJS common module
     modLocalRuntime modCompileOnly("dev.latvian.mods:kubejs:${project.kubejs_version}")

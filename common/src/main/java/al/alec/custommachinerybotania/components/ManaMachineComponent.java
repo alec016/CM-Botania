@@ -22,7 +22,7 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
   private ComponentIOMode mode;
 
   public ManaMachineComponent(IMachineComponentManager manager) {
-    this(manager, ComponentIOMode.BOTH, SideConfig.Template.DEFAULT_ALL_BOTH, 10000, 10000, 10000);
+    this(manager, ComponentIOMode.BOTH, SideConfig.Template.DEFAULT_ALL_BOTH, 1, 0, 0);
   }
 
   public ManaMachineComponent(IMachineComponentManager manager, ComponentIOMode mode, SideConfig.Template config, int capacity, int maxInput, int maxOutput) {
@@ -36,11 +36,10 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
 
   @Override
   public void init() {
-//    if (!ManaNetworkHandler.instance.isPoolIn(getManager().getTile().getLevel(), (ManaPool) getManager().getTile()) && !getManager().getTile().isRemoved()) {
-      BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
-        (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.ADD
-      );
-//    }
+    BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
+      (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.ADD
+    );
+    this.getManager().markDirty();
   }
 
   @Override
@@ -48,6 +47,7 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
     BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
       (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.REMOVE
     );
+    this.getManager().markDirty();
   }
 
   @Override
@@ -57,6 +57,7 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
 
   public ComponentIOMode setMode(ComponentIOMode mode) {
     this.mode = mode;
+    this.getManager().markDirty();
     return mode;
   }
 
@@ -123,10 +124,12 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
   public void getStuffToSync(Consumer<ISyncable<?, ?>> container) {
     container.accept(IntegerSyncable.create(() -> this.mana, mana -> this.mana = mana));
     container.accept(SideConfigSyncable.create(this::getConfig, this.config::set));
+    container.accept(StringSyncable.create(() -> this.getMode().toString().toLowerCase(Locale.ENGLISH), modeS -> this.mode = ComponentIOMode.value(modeS)));
   }
   @Override
   public void dump(List<String> ids) {
     setMana(0);
+    this.getManager().markDirty();
   }
 
   @Override
