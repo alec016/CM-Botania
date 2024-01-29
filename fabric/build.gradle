@@ -47,11 +47,9 @@ dependencies {
     shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
 
     // botania
-//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-entity:5.0.0-beta.1"
-//    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.0-beta.1"
     modLocalRuntime ("dev.emi:trinkets:3.4.0") { transitive = false }
     modLocalRuntime "vazkii.patchouli:Patchouli:${project.minecraft_version}-76-FABRIC"
-    modImplementation "vazkii.botania:Botania:${project.botania_version}-FABRIC"
+    modLocalRuntime modCompileOnly("vazkii.botania:Botania:${project.botania_version}-FABRIC")
 
     // JEI
     modLocalRuntime modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
@@ -64,9 +62,9 @@ dependencies {
     }
 
     // Custom Machinery
-    modImplementation "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
-    modImplementation "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
-    modImplementation "frinn.custommachinery:CustomMachinery-fabric:${project.minecraft_version}-${project.custommachinery_version}"
+    modApi "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.custommachinery_version}"
+    modApi "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.custommachinery_version}"
+    modLocalRuntime "frinn.custommachinery:CustomMachinery-fabric:${project.minecraft_version}-${project.custommachinery_version}"
 
     //KubeJS
     modLocalRuntime modCompileOnly("dev.latvian.mods:kubejs-fabric:${project.kubejs_version}")

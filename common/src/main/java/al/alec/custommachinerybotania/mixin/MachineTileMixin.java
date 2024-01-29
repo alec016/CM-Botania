@@ -4,69 +4,24 @@ import al.alec.custommachinerybotania.Registration;
 import al.alec.custommachinerybotania.components.*;
 import fr.frinn.custommachinery.api.component.*;
 import fr.frinn.custommachinery.api.machine.*;
-import fr.frinn.custommachinery.common.component.*;
 import fr.frinn.custommachinery.common.init.*;
 import java.util.*;
 import net.minecraft.core.*;
 import net.minecraft.world.entity.player.*;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.*;
 import net.minecraft.world.level.block.state.*;
 import org.jetbrains.annotations.*;
 import org.spongepowered.asm.mixin.*;
-import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.*;
-import vazkii.botania.api.*;
 import vazkii.botania.api.block.*;
 import vazkii.botania.api.internal.*;
 import vazkii.botania.api.mana.*;
-import vazkii.botania.common.handler.*;
 
 @Mixin({ CustomMachineTile.class })
 public abstract class MachineTileMixin extends MachineTile implements ManaPool, Wandable {
-
-  @Shadow
-  public abstract MachineComponentManager getComponentManager();
-
-  @Unique
-  private int cmb$ticks = 0;
-  @Unique
-  private boolean cmb$sendPacket = false;
-
-  public MachineTileMixin(BlockPos pos, BlockState blockState) {
-    super(fr.frinn.custommachinery.common.init.Registration.CUSTOM_MACHINE_TILE.get(), pos, blockState);
-  }
-
-  @Override
-  public void setRemoved() {
-    super.setRemoved();
-    if (!ManaNetworkHandler.instance.isPoolIn(level, this) && !isRemoved()) {
-      BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(this, ManaBlockType.POOL, ManaNetworkAction.REMOVE);
-    }
-  }
-
-  @Unique
-  private void cmb$initManaNetwork() {
-    if (!ManaNetworkHandler.instance.isPoolIn(level, this) && !isRemoved()) {
-      BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(this, ManaBlockType.POOL, ManaNetworkAction.ADD);
-    }
-  }
-
-  @Inject(method="clientTick", at=@At("HEAD"))
-  private static void clientTick(Level level, BlockPos pos, BlockState state, CustomMachineTile self, CallbackInfo ci) {
-    ((MachineTileMixin) (Object) self).cmb$initManaNetwork();
-  }
-
-  @Inject(method="serverTick", at=@At("HEAD"))
-  private static void serverTick(Level level, BlockPos pos, BlockState state, CustomMachineTile self, CallbackInfo ci) {
-    ((MachineTileMixin) (Object) self).cmb$initManaNetwork();
-
-    if (((MachineTileMixin) (Object) self).cmb$sendPacket && ((MachineTileMixin) (Object) self).cmb$ticks % 10 == 0) {
-      VanillaPacketDispatcher.dispatchTEToNearbyPlayers(self);
-      ((MachineTileMixin) (Object) self).cmb$sendPacket = false;
-    }
-
-    ((MachineTileMixin) (Object) self).cmb$ticks++;
+  public MachineTileMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    super(type, pos, state);
   }
 
   @Override
@@ -156,7 +111,7 @@ public abstract class MachineTileMixin extends MachineTile implements ManaPool, 
           case NONE -> component.setMode(ComponentIOMode.INPUT);
         });
       this.getComponentManager().markDirty();
-      VanillaPacketDispatcher.dispatchTEToNearbyPlayers(this);
+      VanillaPacketDispatcher.dispatchTEToNearbyPlayers((CustomMachineTile) (Object) this);
     }
     return true;
   }

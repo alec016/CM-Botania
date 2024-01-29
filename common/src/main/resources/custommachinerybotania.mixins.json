@@ -4,14 +4,10 @@
   "package": "al.alec.custommachinerybotania.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "BotaniaBlockEntitiesMixin",
     "CustomCraftRecipeJSBuilderMixin",
-    "CustomMachineBlockMixin",
     "CustomMachineRecipeBuilderJSMixin",
     "MachineTileMixin",
-    "ManaSpreaderBlockEntity$WandHudAccessor",
-    "ManaSpreaderBlockEntity$WandHudMixin",
-    "ManaSpreaderBlockEntityAccessor"
+    "ManaSpreaderBlockEntity$WandHudMixin"
   ],
   "client": [
   ],

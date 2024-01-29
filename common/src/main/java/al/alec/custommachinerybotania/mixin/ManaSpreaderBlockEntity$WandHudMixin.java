@@ -1,45 +1,31 @@
 package al.alec.custommachinerybotania.mixin;
 
-import com.mojang.blaze3d.vertex.*;
-import fr.frinn.custommachinery.common.init.*;
-import java.util.*;
-import net.minecraft.client.*;
-import net.minecraft.world.item.*;
-import org.spongepowered.asm.mixin.*;
-import vazkii.botania.api.*;
-import vazkii.botania.api.block.*;
-import vazkii.botania.client.core.helper.*;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import fr.frinn.custommachinery.common.init.CustomMachineItem;
+import net.minecraft.world.item.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.At;
+import vazkii.botania.api.block.WandHUD;
+import vazkii.botania.common.block.block_entity.mana.ManaSpreaderBlockEntity;
 import vazkii.botania.common.block.block_entity.mana.ManaSpreaderBlockEntity.WandHud;
 
-@Mixin(WandHud.class)
+@Mixin(value = WandHud.class, remap = false)
 public abstract class ManaSpreaderBlockEntity$WandHudMixin implements WandHUD {
-  @Override
-  public void renderHUD(PoseStack ms, Minecraft mc) {
-    String spreaderName = new ItemStack(((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getBlockState().getBlock()).getHoverName().getString();
+  @Final
+  @Shadow
+  private ManaSpreaderBlockEntity spreader;
 
-    ItemStack lensStack = ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getItemHandler().getItem(0);
-    ItemStack recieverStack;
-    if (((ManaSpreaderBlockEntityAccessor) ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader()).getReceiver() instanceof CustomMachineTile tile) {
-      recieverStack = CustomMachineItem.makeMachineItem(tile.getId());
-    } else {
-      recieverStack = ((ManaSpreaderBlockEntityAccessor) ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader()).getReceiver() == null ? ItemStack.EMPTY : new ItemStack(((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getLevel().getBlockState(((ManaSpreaderBlockEntityAccessor) ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader()).getReceiver().getManaReceiverPos()).getBlock());
-    }
-
-    int width = 4 + Collections.max(Arrays.asList(
-      102, // Mana bar width
-      mc.font.width(spreaderName),
-      RenderHelper.itemWithNameWidth(mc, lensStack),
-      RenderHelper.itemWithNameWidth(mc, recieverStack)
-    ));
-    int height = 22 + (lensStack.isEmpty() ? 0 : 18) + (recieverStack.isEmpty() ? 0 : 18);
-
-    int centerX = mc.getWindow().getGuiScaledWidth() / 2;
-    int centerY = mc.getWindow().getGuiScaledHeight() / 2;
-    RenderHelper.renderHUDBox(ms, centerX - width / 2, centerY + 8, centerX + width / 2, centerY + 8 + height);
-
-    int color = ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getVariant().hudColor;
-    BotaniaAPIClient.instance().drawSimpleManaHUD(ms, color, ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getCurrentMana(), ((ManaSpreaderBlockEntity$WandHudAccessor) this).getSpreader().getMaxMana(), spreaderName);
-    RenderHelper.renderItemWithNameCentered(ms, mc, recieverStack, centerY + 30, color);
-    RenderHelper.renderItemWithNameCentered(ms, mc, lensStack, centerY + (recieverStack.isEmpty() ? 30 : 48), color);
+  @ModifyVariable(method = "renderHUD", at = @At(value = "STORE"), ordinal = 1)
+  private ItemStack cmbotania$replaceItemByMachineItem(@NotNull ItemStack recieverStack) {
+    if(recieverStack.getItem() instanceof CustomMachineItem
+      && this.spreader.getLevel() != null
+      && this.spreader.getBinding() != null
+      && this.spreader.getLevel().getBlockEntity(this.spreader.getBinding()) instanceof CustomMachineTile machine)
+      return CustomMachineItem.makeMachineItem(machine.getId());
+    return recieverStack;
   }
 }

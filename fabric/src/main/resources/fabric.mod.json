@@ -17,6 +17,9 @@
   "entrypoints": {
     "main": [
       "al.alec.custommachinerybotania.fabric.CustomMachineryBotaniaFabric"
+    ],
+    "client": [
+      "al.alec.custommachinerybotania.fabric.client.CustomMachineryBotaniaClient"
     ]
   },
   "mixins": [

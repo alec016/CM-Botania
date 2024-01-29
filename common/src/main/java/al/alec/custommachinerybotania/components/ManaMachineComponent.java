@@ -13,22 +13,20 @@ import net.minecraft.nbt.*;
 import vazkii.botania.api.*;
 import vazkii.botania.api.mana.*;
 
-public class ManaMachineComponent implements IMachineComponent, ITickableComponent, ISerializableComponent, ISyncableStuff, IComparatorInputComponent, ISideConfigComponent, IDumpComponent {
+public class ManaMachineComponent implements IMachineComponent, ITickableComponent, ISerializableComponent, ISyncableStuff, IComparatorInputComponent, IDumpComponent {
   private int mana;
-  private final SideConfig config;
   private final int capacity, maxIn, maxOut;
 
   private final IMachineComponentManager manager;
   private ComponentIOMode mode;
 
   public ManaMachineComponent(IMachineComponentManager manager) {
-    this(manager, ComponentIOMode.BOTH, SideConfig.Template.DEFAULT_ALL_BOTH, 1, 0, 0);
+    this(manager, ComponentIOMode.BOTH, 1, 0, 0);
   }
 
-  public ManaMachineComponent(IMachineComponentManager manager, ComponentIOMode mode, SideConfig.Template config, int capacity, int maxInput, int maxOutput) {
+  public ManaMachineComponent(IMachineComponentManager manager, ComponentIOMode mode, int capacity, int maxInput, int maxOutput) {
     this.manager = manager;
     this.mode = mode;
-    this.config = config.build(this);
     this.capacity = capacity;
     this.maxIn = maxInput;
     this.maxOut = maxOutput;
@@ -39,7 +37,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
     BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
       (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.ADD
     );
-    this.getManager().markDirty();
   }
 
   @Override
@@ -47,7 +44,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
     BotaniaAPI.instance().getManaNetworkInstance().fireManaNetworkEvent(
       (ManaPool) getManager().getTile(), ManaBlockType.POOL, ManaNetworkAction.REMOVE
     );
-    this.getManager().markDirty();
   }
 
   @Override
@@ -106,7 +102,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
   @Override
   public void serialize(CompoundTag nbt) {
     nbt.putLong("mana", this.mana);
-    nbt.put("config", this.config.serialize());
     nbt.putString("mode", this.mode.toString());
   }
 
@@ -114,8 +109,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
   public void deserialize(CompoundTag nbt) {
     if (nbt.contains("mana", Tag.TAG_INT))
       this.mana = Math.min(nbt.getInt("mana"), this.capacity);
-    if (nbt.contains("config"))
-      this.config.deserialize(nbt.get("config"));
     if (nbt.contains("mode", Tag.TAG_STRING))
       this.mode = ComponentIOMode.value(nbt.getString("mode"));
   }
@@ -123,7 +116,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
   @Override
   public void getStuffToSync(Consumer<ISyncable<?, ?>> container) {
     container.accept(IntegerSyncable.create(() -> this.mana, mana -> this.mana = mana));
-    container.accept(SideConfigSyncable.create(this::getConfig, this.config::set));
     container.accept(StringSyncable.create(() -> this.getMode().toString().toLowerCase(Locale.ENGLISH), modeS -> this.mode = ComponentIOMode.value(modeS)));
   }
   @Override
@@ -162,35 +154,21 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
     return Registration.MANA_MACHINE_COMPONENT.get();
   }
 
-  @Override
-  public SideConfig getConfig() {
-    return this.config;
-  }
-
-  @Override
-  public String getId() {
-    return "mana";
-  }
-
   public static class Template implements IMachineComponentTemplate<ManaMachineComponent> {
 
     public static final NamedCodec<Template> CODEC = NamedCodec.record(templateInstance ->
       templateInstance.group(
-        SideConfig.Template.CODEC.optionalFieldOf("config", SideConfig.Template.DEFAULT_ALL_BOTH).forGetter(template -> template.config),
         NamedCodec.enumCodec(ComponentIOMode.class).optionalFieldOf("mode", ComponentIOMode.BOTH).forGetter(template -> template.mode),
         NamedCodec.intRange(1, Integer.MAX_VALUE).fieldOf("capacity").forGetter(template -> template.capacity),
         NamedCodec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("maxInput").forGetter(template -> Optional.of(template.maxInput)),
         NamedCodec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("maxOutput").forGetter(template -> Optional.of(template.maxOutput))
-      ).apply(templateInstance, (config, mode, capacity, maxIn, maxOut) -> new Template(mode, config, capacity, maxIn.orElse(capacity), maxOut.orElse(capacity))), "Mana machine component"
+      ).apply(templateInstance, (mode, capacity, maxIn, maxOut) -> new Template(mode, capacity, maxIn.orElse(capacity), maxOut.orElse(capacity))), "Mana machine component"
     );
 
     private final int capacity, maxInput, maxOutput;
-
-    private final SideConfig.Template config;
     private final ComponentIOMode mode;
 
-    private Template(ComponentIOMode mode, SideConfig.Template config, int capacity, int maxInput, int maxOutput) {
-      this.config = config;
+    private Template(ComponentIOMode mode, int capacity, int maxInput, int maxOutput) {
       this.capacity = capacity;
       this.maxInput = maxInput;
       this.maxOutput = maxOutput;
@@ -214,7 +192,7 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
 
     @Override
     public ManaMachineComponent build(IMachineComponentManager manager) {
-      return new ManaMachineComponent(manager, this.mode, this.config, this.capacity, this.maxInput, this.maxOutput);
+      return new ManaMachineComponent(manager, this.mode, this.capacity, this.maxInput, this.maxOutput);
     }
   }
 }

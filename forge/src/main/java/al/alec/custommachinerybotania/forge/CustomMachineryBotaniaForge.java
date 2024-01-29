@@ -1,14 +1,14 @@
 package al.alec.custommachinerybotania.forge;
 
+import al.alec.custommachinerybotania.client.render.*;
 import dev.architectury.platform.forge.EventBuses;
 import al.alec.custommachinerybotania.CustomMachineryBotania;
 import fr.frinn.custommachinery.common.init.*;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.entity.*;
-import net.minecraftforge.api.distmarker.*;
 import net.minecraftforge.common.*;
 import net.minecraftforge.event.*;
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.*;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -58,6 +58,14 @@ public class CustomMachineryBotaniaForge {
         prefix("wandable"),
         CapabilityUtil.makeProvider(BotaniaForgeCapabilities.WANDABLE, (Wandable) tile)
       );
+
+//      e.addCapability(
+//        prefix("wand_hud"),
+//        CapabilityUtil.makeProvider(
+//          BotaniaForgeClientCapabilities.WAND_HUD,
+//          new CustomMachineTileWandHud(tile)
+//        )
+//      );
     }
   }
 }
