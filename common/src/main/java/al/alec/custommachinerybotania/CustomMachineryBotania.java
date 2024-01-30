@@ -4,6 +4,7 @@ import al.alec.custommachinerybotania.client.*;
 import dev.architectury.event.*;
 import dev.architectury.event.events.common.*;
 import dev.architectury.utils.*;
+import fr.frinn.custommachinery.api.component.variant.*;
 import fr.frinn.custommachinery.common.init.*;
 import net.minecraft.core.*;
 import net.minecraft.world.*;
@@ -17,6 +18,9 @@ public class CustomMachineryBotania {
     Registration.GUI_ELEMENTS.register();
     Registration.MACHINE_COMPONENTS.register();
     Registration.REQUIREMENTS.register();
+
+    RegisterComponentVariantEvent.EVENT.register(Registration::registerComponentVariants);
+
     EnvExecutor.runInEnv(Env.CLIENT, () -> ClientHandler::clientInit);
 
     InteractionEvent.RIGHT_CLICK_BLOCK.register(CustomMachineryBotania::handleWandClick);

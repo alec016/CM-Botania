@@ -1,6 +1,7 @@
 package al.alec.custommachinerybotania;
 
 import al.alec.custommachinerybotania.components.ManaMachineComponent;
+import al.alec.custommachinerybotania.components.variant.item.*;
 import al.alec.custommachinerybotania.guielement.*;
 import al.alec.custommachinerybotania.requirements.*;
 import dev.architectury.registry.registries.DeferredRegister;
@@ -8,6 +9,7 @@ import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.frinn.custommachinery.api.ICustomMachineryAPI;
 import fr.frinn.custommachinery.api.component.MachineComponentType;
+import fr.frinn.custommachinery.api.component.variant.*;
 import fr.frinn.custommachinery.api.guielement.GuiElementType;
 import fr.frinn.custommachinery.api.requirement.RequirementType;
 
@@ -22,4 +24,8 @@ public abstract class Registration {
   public static final RegistrySupplier<RequirementType<ManaRequirement>> MANA_REQUIREMENT = REQUIREMENTS.register("mana", () -> RequirementType.world(ManaRequirement.CODEC));
   public static final RegistrySupplier<RequirementType<ManaRequirementPerTick>> MANA_REQUIREMENT_PER_TICK = REQUIREMENTS.register("mana_per_tick", () -> RequirementType.world(ManaRequirementPerTick.CODEC));
 
+
+  public static void registerComponentVariants(RegisterComponentVariantEvent event) {
+    event.register(fr.frinn.custommachinery.common.init.Registration.ITEM_MACHINE_COMPONENT.get(), ManaItemComponentVariant.ID, ManaItemComponentVariant.CODEC);
+  }
 }
