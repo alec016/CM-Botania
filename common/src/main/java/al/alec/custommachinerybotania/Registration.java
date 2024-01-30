@@ -20,7 +20,7 @@ public abstract class Registration {
   public static final DeferredRegister<RequirementType<?>> REQUIREMENTS = DeferredRegister.create(ICustomMachineryAPI.INSTANCE.modid(), RequirementType.REGISTRY_KEY);
 
   public static final RegistrySupplier<GuiElementType<ManaGuiElement>> MANA_GUI_ELEMENT = GUI_ELEMENTS.register("mana", () -> GuiElementType.create(ManaGuiElement.CODEC));
-  public static final RegistrySupplier<MachineComponentType<ManaMachineComponent>> MANA_MACHINE_COMPONENT = MACHINE_COMPONENTS.register("mana", () -> MachineComponentType.create(ManaMachineComponent.Template.CODEC, ManaMachineComponent::new));
+  public static final RegistrySupplier<MachineComponentType<ManaMachineComponent>> MANA_MACHINE_COMPONENT = MACHINE_COMPONENTS.register("mana", () -> MachineComponentType.create(ManaMachineComponent.Template.CODEC));
   public static final RegistrySupplier<RequirementType<ManaRequirement>> MANA_REQUIREMENT = REQUIREMENTS.register("mana", () -> RequirementType.world(ManaRequirement.CODEC));
   public static final RegistrySupplier<RequirementType<ManaRequirementPerTick>> MANA_REQUIREMENT_PER_TICK = REQUIREMENTS.register("mana_per_tick", () -> RequirementType.world(ManaRequirementPerTick.CODEC));
 
