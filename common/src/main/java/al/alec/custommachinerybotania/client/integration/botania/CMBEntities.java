@@ -1,9 +1,11 @@
 package al.alec.custommachinerybotania.client.integration.botania;
 
-import al.alec.custommachinerybotania.client.render.*;
-import fr.frinn.custommachinery.common.init.*;
-import vazkii.botania.api.block.*;
-import vazkii.botania.common.block.block_entity.*;
+
+import al.alec.custommachinerybotania.client.render.CustomMachineTileWandHud;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import fr.frinn.custommachinery.common.init.Registration;
+import vazkii.botania.api.block.WandHUD;
+import vazkii.botania.common.block.block_entity.BotaniaBlockEntities;
 
 public class CMBEntities {
   public static void registerWandHudCaps (BotaniaBlockEntities.BECapConsumer<WandHUD> consumer) {

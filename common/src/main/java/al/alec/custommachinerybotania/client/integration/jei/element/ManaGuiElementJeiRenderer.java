@@ -1,11 +1,12 @@
 package al.alec.custommachinerybotania.client.integration.jei.element;
 
-import al.alec.custommachinerybotania.guielement.*;
-import com.mojang.blaze3d.vertex.*;
-import fr.frinn.custommachinery.api.crafting.*;
-import fr.frinn.custommachinery.api.integration.jei.*;
-import fr.frinn.custommachinery.client.*;
-import net.minecraft.client.gui.*;
+
+import al.alec.custommachinerybotania.client.ClientHandler;
+import al.alec.custommachinerybotania.guielement.ManaGuiElement;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.frinn.custommachinery.api.crafting.IMachineRecipe;
+import fr.frinn.custommachinery.api.integration.jei.IJEIElementRenderer;
+import net.minecraft.client.gui.GuiComponent;
 
 public class ManaGuiElementJeiRenderer implements IJEIElementRenderer<ManaGuiElement> {
   @Override

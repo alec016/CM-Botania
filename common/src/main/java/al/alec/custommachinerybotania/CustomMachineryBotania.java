@@ -1,15 +1,18 @@
 package al.alec.custommachinerybotania;
 
-import al.alec.custommachinerybotania.client.*;
-import dev.architectury.event.*;
-import dev.architectury.event.events.common.*;
-import dev.architectury.utils.*;
-import fr.frinn.custommachinery.api.component.variant.*;
-import fr.frinn.custommachinery.common.init.*;
-import net.minecraft.core.*;
-import net.minecraft.world.*;
-import net.minecraft.world.entity.player.*;
-import vazkii.botania.common.item.*;
+
+import al.alec.custommachinerybotania.client.ClientHandler;
+import dev.architectury.event.EventResult;
+import dev.architectury.event.events.common.InteractionEvent;
+import dev.architectury.utils.Env;
+import dev.architectury.utils.EnvExecutor;
+import fr.frinn.custommachinery.api.component.variant.RegisterComponentVariantEvent;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import vazkii.botania.common.item.WandOfTheForestItem;
 
 public class CustomMachineryBotania {
   public static final String MODID = "custommachinerybotania";

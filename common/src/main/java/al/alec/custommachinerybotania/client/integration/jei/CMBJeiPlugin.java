@@ -1,12 +1,14 @@
 package al.alec.custommachinerybotania.client.integration.jei;
 
-import al.alec.custommachinerybotania.*;
-import al.alec.custommachinerybotania.client.integration.jei.mana.*;
-import fr.frinn.custommachinery.client.integration.jei.*;
-import java.util.*;
-import mezz.jei.api.*;
-import mezz.jei.api.registration.*;
-import net.minecraft.resources.*;
+
+import al.alec.custommachinerybotania.CustomMachineryBotania;
+import al.alec.custommachinerybotania.client.integration.jei.mana.ManaIngredientHelper;
+import fr.frinn.custommachinery.client.integration.jei.DummyIngredientRenderer;
+import java.util.Collections;
+import mezz.jei.api.IModPlugin;
+import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.registration.IModIngredientRegistration;
+import net.minecraft.resources.ResourceLocation;
 
 @JeiPlugin
 public class CMBJeiPlugin implements IModPlugin {

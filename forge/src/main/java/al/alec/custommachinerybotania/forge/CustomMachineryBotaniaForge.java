@@ -1,23 +1,22 @@
 package al.alec.custommachinerybotania.forge;
 
-import al.alec.custommachinerybotania.client.render.*;
 import dev.architectury.platform.forge.EventBuses;
 import al.alec.custommachinerybotania.CustomMachineryBotania;
-import fr.frinn.custommachinery.common.init.*;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.block.entity.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.event.*;
-import net.minecraftforge.eventbus.api.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.*;
+import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegisterEvent;
-import vazkii.botania.api.*;
-import vazkii.botania.api.block.*;
-import vazkii.botania.api.mana.*;
-import static vazkii.botania.common.lib.ResourceLocationHelper.*;
-import vazkii.botania.forge.*;
+import vazkii.botania.api.BotaniaForgeCapabilities;
+import vazkii.botania.api.block.Wandable;
+import vazkii.botania.api.mana.ManaReceiver;
+import static vazkii.botania.common.lib.ResourceLocationHelper.prefix;
+import vazkii.botania.forge.CapabilityUtil;
 
 @Mod(CustomMachineryBotania.MODID)
 @Mod.EventBusSubscriber(modid = CustomMachineryBotania.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -39,9 +38,6 @@ public class CustomMachineryBotaniaForge {
     bus.addGenericListener(BlockEntity.class, this::attachBeCaps);
   }
 
-  /**
-   * Delay the initialization of the deferred registries because CM might not have created the registries at that time.
-   */
   private void onRegister(final RegisterEvent event) {
     if(event.getRegistryKey() == Registry.BLOCK_REGISTRY)
       CustomMachineryBotania.init();
@@ -58,14 +54,6 @@ public class CustomMachineryBotaniaForge {
         prefix("wandable"),
         CapabilityUtil.makeProvider(BotaniaForgeCapabilities.WANDABLE, (Wandable) tile)
       );
-
-//      e.addCapability(
-//        prefix("wand_hud"),
-//        CapabilityUtil.makeProvider(
-//          BotaniaForgeClientCapabilities.WAND_HUD,
-//          new CustomMachineTileWandHud(tile)
-//        )
-//      );
     }
   }
 }

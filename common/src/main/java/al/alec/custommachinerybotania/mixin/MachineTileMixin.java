@@ -1,22 +1,24 @@
 package al.alec.custommachinerybotania.mixin;
 
 import al.alec.custommachinerybotania.Registration;
-import al.alec.custommachinerybotania.components.*;
-import fr.frinn.custommachinery.api.component.*;
-import fr.frinn.custommachinery.api.machine.*;
-import fr.frinn.custommachinery.common.init.*;
-import java.util.*;
-import net.minecraft.core.*;
-import net.minecraft.world.entity.player.*;
-import net.minecraft.world.item.*;
+import al.alec.custommachinerybotania.components.ManaMachineComponent;
+import fr.frinn.custommachinery.api.component.ComponentIOMode;
+import fr.frinn.custommachinery.api.machine.MachineTile;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import java.util.Optional;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.*;
-import net.minecraft.world.level.block.state.*;
-import org.jetbrains.annotations.*;
-import org.spongepowered.asm.mixin.*;
-import vazkii.botania.api.block.*;
-import vazkii.botania.api.internal.*;
-import vazkii.botania.api.mana.*;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.mixin.Mixin;
+import vazkii.botania.api.block.Wandable;
+import vazkii.botania.api.internal.VanillaPacketDispatcher;
+import vazkii.botania.api.mana.ManaPool;
 
 @Mixin({ CustomMachineTile.class })
 public abstract class MachineTileMixin extends MachineTile implements ManaPool, Wandable {

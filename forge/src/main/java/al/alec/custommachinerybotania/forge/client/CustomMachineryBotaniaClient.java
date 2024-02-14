@@ -1,34 +1,21 @@
 package al.alec.custommachinerybotania.forge.client;
 
-import al.alec.custommachinerybotania.*;
-import al.alec.custommachinerybotania.client.integration.botania.*;
-import com.google.common.base.*;
-import java.util.*;
-import java.util.function.Function;
-import java.util.function.Supplier;
-import net.minecraft.world.level.block.entity.*;
-import net.minecraftforge.api.distmarker.*;
-import net.minecraftforge.common.*;
-import net.minecraftforge.event.*;
-import net.minecraftforge.eventbus.api.*;
-import net.minecraftforge.fml.common.*;
-import net.minecraftforge.fml.event.lifecycle.*;
-import vazkii.botania.api.*;
-import vazkii.botania.api.block.*;
-import static vazkii.botania.common.lib.ResourceLocationHelper.*;
-import vazkii.botania.forge.*;
+import al.alec.custommachinerybotania.CustomMachineryBotania;
+import al.alec.custommachinerybotania.client.render.CustomMachineTileWandHud;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AttachCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import vazkii.botania.api.BotaniaForgeClientCapabilities;
+import static vazkii.botania.common.lib.ResourceLocationHelper.prefix;
+import vazkii.botania.forge.CapabilityUtil;
 
 @Mod.EventBusSubscriber(modid = CustomMachineryBotania.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class CustomMachineryBotaniaClient {
-  private static final Supplier<Map<BlockEntityType<?>, Function<BlockEntity, WandHUD>>> WAND_HUD = Suppliers.memoize(() -> {
-    var ret = new IdentityHashMap<BlockEntityType<?>, Function<BlockEntity, WandHUD>>();
-    CMBEntities.registerWandHudCaps((factory, types) -> {
-      for (var type : types) {
-        ret.put(type, factory);
-      }
-    });
-    return Collections.unmodifiableMap(ret);
-  });
 
   @SubscribeEvent
   public static void clientInit(FMLClientSetupEvent event) {
@@ -36,13 +23,17 @@ public class CustomMachineryBotaniaClient {
     bus.addGenericListener(BlockEntity.class, CustomMachineryBotaniaClient::attachBeCapabilities);
   }
 
-  private static void attachBeCapabilities(AttachCapabilitiesEvent<BlockEntity> e) {
+  private static void attachBeCapabilities(final AttachCapabilitiesEvent<BlockEntity> e) {
     var be = e.getObject();
 
-    var makeWandHud = WAND_HUD.get().get(be.getType());
-    if (makeWandHud != null) {
-      e.addCapability(prefix("wand_hud"),
-        CapabilityUtil.makeProvider(BotaniaForgeClientCapabilities.WAND_HUD, makeWandHud.apply(be)));
+    if (be instanceof CustomMachineTile tile) {
+      e.addCapability(
+        prefix("wand_hud"),
+        CapabilityUtil.makeProvider(
+          BotaniaForgeClientCapabilities.WAND_HUD,
+          new CustomMachineTileWandHud(tile)
+        )
+      );
     }
   }
 }

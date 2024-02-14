@@ -1,12 +1,12 @@
 package al.alec.custommachinerybotania.integration.crafttweaker.craft;
 
 
-import al.alec.custommachinerybotania.requirements.*;
-import com.blamejared.crafttweaker.api.annotation.*;
-import fr.frinn.custommachinery.api.integration.kubejs.*;
-import fr.frinn.custommachinery.api.requirement.*;
-import fr.frinn.custommachinery.common.integration.crafttweaker.*;
-import org.openzen.zencode.java.*;
+import al.alec.custommachinerybotania.requirements.ManaRequirement;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import fr.frinn.custommachinery.api.requirement.RequirementIOMode;
+import fr.frinn.custommachinery.common.integration.crafttweaker.CTConstants;
+import fr.frinn.custommachinery.common.integration.crafttweaker.CustomCraftRecipeCTBuilder;
+import org.openzen.zencode.java.ZenCodeType;
 
 @ZenRegister
 @ZenCodeType.Expansion(CTConstants.RECIPE_BUILDER_CRAFT)

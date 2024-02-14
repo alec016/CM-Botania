@@ -1,19 +1,21 @@
 package al.alec.custommachinerybotania.client.render;
 
-import al.alec.custommachinerybotania.*;
+import al.alec.custommachinerybotania.CustomMachineryBotania;
 import al.alec.custommachinerybotania.Registration;
-import com.mojang.blaze3d.systems.*;
-import com.mojang.blaze3d.vertex.*;
-import fr.frinn.custommachinery.common.init.*;
-import net.minecraft.client.*;
-import net.minecraft.resources.*;
-import net.minecraft.world.item.*;
-import org.lwjgl.opengl.*;
-import vazkii.botania.api.*;
-import vazkii.botania.api.block.*;
-import vazkii.botania.api.mana.*;
-import vazkii.botania.client.core.helper.*;
-import vazkii.botania.common.item.*;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.frinn.custommachinery.common.init.CustomMachineItem;
+import fr.frinn.custommachinery.common.init.CustomMachineTile;
+import net.minecraft.client.Minecraft;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import org.lwjgl.opengl.GL11;
+import vazkii.botania.api.BotaniaAPIClient;
+import vazkii.botania.api.block.WandHUD;
+import vazkii.botania.api.mana.ManaPool;
+import vazkii.botania.client.core.helper.RenderHelper;
+import vazkii.botania.common.item.BotaniaItems;
+import vazkii.botania.common.item.ManaTabletItem;
 
 public class CustomMachineTileWandHud implements WandHUD {
   private static final ResourceLocation manaBar = new ResourceLocation(CustomMachineryBotania.MODID, "textures/mana_hud.png");

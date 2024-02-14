@@ -1,9 +1,10 @@
 package al.alec.custommachinerybotania.util.transfer;
 
-import al.alec.custommachinerybotania.components.*;
-import fr.frinn.custommachinery.common.component.*;
-import net.minecraft.world.item.*;
-import vazkii.botania.xplat.*;
+
+import al.alec.custommachinerybotania.components.ManaMachineComponent;
+import fr.frinn.custommachinery.common.component.ItemMachineComponent;
+import net.minecraft.world.item.ItemStack;
+import vazkii.botania.xplat.XplatAbstractions;
 
 public class ManaHelper implements IManaHelper {
   public static final ManaHelper INSTANCE = new ManaHelper();

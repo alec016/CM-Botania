@@ -1,16 +1,17 @@
 package al.alec.custommachinerybotania.client;
 
-import al.alec.custommachinerybotania.*;
-import al.alec.custommachinerybotania.client.integration.jei.element.*;
-import al.alec.custommachinerybotania.client.render.element.*;
-import com.mojang.blaze3d.systems.*;
-import com.mojang.blaze3d.vertex.*;
-import dev.architectury.platform.*;
-import fr.frinn.custommachinery.api.guielement.*;
-import fr.frinn.custommachinery.api.integration.jei.*;
-import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.resources.*;
+
+import al.alec.custommachinerybotania.Registration;
+import al.alec.custommachinerybotania.client.integration.jei.element.ManaGuiElementJeiRenderer;
+import al.alec.custommachinerybotania.client.render.element.ManaGuiElementWidget;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
+import dev.architectury.platform.Platform;
+import fr.frinn.custommachinery.api.guielement.RegisterGuiElementWidgetSupplierEvent;
+import fr.frinn.custommachinery.api.integration.jei.RegisterGuiElementJEIRendererEvent;
+import net.minecraft.client.gui.GuiComponent;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.resources.ResourceLocation;
 
 public class ClientHandler {
 

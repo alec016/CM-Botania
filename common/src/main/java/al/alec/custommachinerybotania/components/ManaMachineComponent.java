@@ -1,17 +1,31 @@
 package al.alec.custommachinerybotania.components;
 
-import al.alec.custommachinerybotania.client.integration.jei.mana.*;
+import al.alec.custommachinerybotania.client.integration.jei.mana.Mana;
 import fr.frinn.custommachinery.api.codec.NamedCodec;
-import fr.frinn.custommachinery.api.component.*;
-import fr.frinn.custommachinery.api.network.*;
-import fr.frinn.custommachinery.common.network.syncable.*;
-import fr.frinn.custommachinery.impl.component.config.SideConfig;
 import al.alec.custommachinerybotania.Registration;
-import java.util.*;
-import java.util.function.*;
-import net.minecraft.nbt.*;
-import vazkii.botania.api.*;
-import vazkii.botania.api.mana.*;
+import fr.frinn.custommachinery.api.component.ComponentIOMode;
+import fr.frinn.custommachinery.api.component.IComparatorInputComponent;
+import fr.frinn.custommachinery.api.component.IDumpComponent;
+import fr.frinn.custommachinery.api.component.IMachineComponent;
+import fr.frinn.custommachinery.api.component.IMachineComponentManager;
+import fr.frinn.custommachinery.api.component.IMachineComponentTemplate;
+import fr.frinn.custommachinery.api.component.ISerializableComponent;
+import fr.frinn.custommachinery.api.component.ITickableComponent;
+import fr.frinn.custommachinery.api.component.MachineComponentType;
+import fr.frinn.custommachinery.api.network.ISyncable;
+import fr.frinn.custommachinery.api.network.ISyncableStuff;
+import fr.frinn.custommachinery.common.network.syncable.IntegerSyncable;
+import fr.frinn.custommachinery.common.network.syncable.StringSyncable;
+import java.util.List;
+import java.util.Locale;
+import java.util.Optional;
+import java.util.function.Consumer;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import vazkii.botania.api.BotaniaAPI;
+import vazkii.botania.api.mana.ManaBlockType;
+import vazkii.botania.api.mana.ManaNetworkAction;
+import vazkii.botania.api.mana.ManaPool;
 
 public class ManaMachineComponent implements IMachineComponent, ITickableComponent, ISerializableComponent, ISyncableStuff, IComparatorInputComponent, IDumpComponent {
   private int mana;
@@ -101,7 +115,7 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
 
   @Override
   public void serialize(CompoundTag nbt) {
-    nbt.putLong("mana", this.mana);
+    nbt.putInt("mana", this.mana);
     nbt.putString("mode", this.mode.toString());
   }
 

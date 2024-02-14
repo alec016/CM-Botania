@@ -1,15 +1,16 @@
 package al.alec.custommachinerybotania;
 
 import al.alec.custommachinerybotania.components.ManaMachineComponent;
-import al.alec.custommachinerybotania.components.variant.item.*;
-import al.alec.custommachinerybotania.guielement.*;
-import al.alec.custommachinerybotania.requirements.*;
+import al.alec.custommachinerybotania.components.variant.item.ManaItemComponentVariant;
+import al.alec.custommachinerybotania.guielement.ManaGuiElement;
+import al.alec.custommachinerybotania.requirements.ManaRequirement;
+import al.alec.custommachinerybotania.requirements.ManaRequirementPerTick;
 import dev.architectury.registry.registries.DeferredRegister;
 import dev.architectury.registry.registries.Registries;
 import dev.architectury.registry.registries.RegistrySupplier;
 import fr.frinn.custommachinery.api.ICustomMachineryAPI;
 import fr.frinn.custommachinery.api.component.MachineComponentType;
-import fr.frinn.custommachinery.api.component.variant.*;
+import fr.frinn.custommachinery.api.component.variant.RegisterComponentVariantEvent;
 import fr.frinn.custommachinery.api.guielement.GuiElementType;
 import fr.frinn.custommachinery.api.requirement.RequirementType;
 

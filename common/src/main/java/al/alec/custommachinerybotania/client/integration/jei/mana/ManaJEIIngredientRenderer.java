@@ -1,16 +1,18 @@
 package al.alec.custommachinerybotania.client.integration.jei.mana;
 
 import al.alec.custommachinerybotania.client.integration.jei.CustomIngredientTypes;
-import al.alec.custommachinerybotania.client.render.element.*;
-import al.alec.custommachinerybotania.guielement.*;
-import com.mojang.blaze3d.vertex.*;
-import fr.frinn.custommachinery.api.integration.jei.*;
-import fr.frinn.custommachinery.common.util.*;
-import java.util.*;
-import mezz.jei.api.ingredients.*;
-import net.minecraft.network.chat.*;
-import net.minecraft.world.item.*;
-import org.jetbrains.annotations.*;
+import al.alec.custommachinerybotania.client.render.element.ManaGuiElementWidget;
+import al.alec.custommachinerybotania.guielement.ManaGuiElement;
+import com.mojang.blaze3d.vertex.PoseStack;
+import fr.frinn.custommachinery.api.integration.jei.JEIIngredientRenderer;
+import fr.frinn.custommachinery.common.util.Utils;
+import java.util.ArrayList;
+import java.util.List;
+import mezz.jei.api.ingredients.IIngredientType;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ManaJEIIngredientRenderer extends JEIIngredientRenderer<Mana, ManaGuiElement> {
 

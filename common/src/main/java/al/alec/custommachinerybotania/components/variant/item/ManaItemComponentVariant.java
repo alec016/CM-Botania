@@ -1,16 +1,17 @@
 package al.alec.custommachinerybotania.components.variant.item;
 
-import al.alec.custommachinerybotania.*;
-import al.alec.custommachinerybotania.components.*;
-import al.alec.custommachinerybotania.util.transfer.*;
-import fr.frinn.custommachinery.*;
-import fr.frinn.custommachinery.api.codec.*;
-import fr.frinn.custommachinery.api.component.*;
-import fr.frinn.custommachinery.api.component.variant.*;
-import fr.frinn.custommachinery.common.component.*;
-import fr.frinn.custommachinery.impl.component.variant.*;
-import net.minecraft.resources.*;
-import net.minecraft.world.item.*;
+
+import al.alec.custommachinerybotania.Registration;
+import al.alec.custommachinerybotania.components.ManaMachineComponent;
+import al.alec.custommachinerybotania.util.transfer.ManaHelper;
+import fr.frinn.custommachinery.CustomMachinery;
+import fr.frinn.custommachinery.api.codec.NamedCodec;
+import fr.frinn.custommachinery.api.component.IMachineComponentManager;
+import fr.frinn.custommachinery.api.component.variant.ITickableComponentVariant;
+import fr.frinn.custommachinery.common.component.ItemMachineComponent;
+import fr.frinn.custommachinery.impl.component.variant.ItemComponentVariant;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 
 public class ManaItemComponentVariant extends ItemComponentVariant implements ITickableComponentVariant<ItemMachineComponent> {
 
@@ -28,7 +29,7 @@ public class ManaItemComponentVariant extends ItemComponentVariant implements IT
   }
 
   @Override
-  public NamedCodec<? extends IComponentVariant> getCodec() {
+  public NamedCodec<ManaItemComponentVariant> getCodec() {
     return CODEC;
   }
 

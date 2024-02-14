@@ -1,15 +1,17 @@
 package al.alec.custommachinerybotania.client.integration.jei.wrapper;
 
 import al.alec.custommachinerybotania.Registration;
-import al.alec.custommachinerybotania.client.integration.jei.mana.*;
-import al.alec.custommachinerybotania.guielement.*;
-import fr.frinn.custommachinery.api.guielement.*;
-import fr.frinn.custommachinery.api.integration.jei.*;
-import fr.frinn.custommachinery.api.requirement.*;
 import al.alec.custommachinerybotania.client.integration.jei.CustomIngredientTypes;
-import fr.frinn.custommachinery.common.util.*;
-import mezz.jei.api.gui.builder.*;
-import net.minecraft.network.chat.*;
+import al.alec.custommachinerybotania.client.integration.jei.mana.Mana;
+import al.alec.custommachinerybotania.client.integration.jei.mana.ManaJEIIngredientRenderer;
+import al.alec.custommachinerybotania.guielement.ManaGuiElement;
+import fr.frinn.custommachinery.api.guielement.IGuiElement;
+import fr.frinn.custommachinery.api.integration.jei.IJEIIngredientWrapper;
+import fr.frinn.custommachinery.api.integration.jei.IRecipeHelper;
+import fr.frinn.custommachinery.api.requirement.RequirementIOMode;
+import fr.frinn.custommachinery.common.util.Utils;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import net.minecraft.network.chat.Component;
 
 public class ManaIngredientWrapper implements IJEIIngredientWrapper<Mana> {
 

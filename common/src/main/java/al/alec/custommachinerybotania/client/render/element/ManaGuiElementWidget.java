@@ -2,20 +2,24 @@ package al.alec.custommachinerybotania.client.render.element;
 
 import al.alec.custommachinerybotania.guielement.ManaGuiElement;
 import al.alec.custommachinerybotania.Registration;
-import com.mojang.blaze3d.systems.*;
-import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.*;
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.DefaultVertexFormat;
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.Tesselator;
+import com.mojang.blaze3d.vertex.VertexFormat;
+import com.mojang.math.Matrix4f;
 import fr.frinn.custommachinery.impl.guielement.TexturedGuiElementWidget;
 import fr.frinn.custommachinery.api.guielement.IMachineScreen;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.*;
+import net.minecraft.client.renderer.GameRenderer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import fr.frinn.custommachinery.client.ClientHandler;
 import java.util.Collections;
 import java.util.List;
 import fr.frinn.custommachinery.common.util.Utils;
-import net.minecraft.world.inventory.*;
-import vazkii.botania.client.core.handler.*;
+import net.minecraft.world.inventory.InventoryMenu;
+import vazkii.botania.client.core.handler.MiscellaneousModels;
 
 public class ManaGuiElementWidget extends TexturedGuiElementWidget<ManaGuiElement> {
   private static final int TEXTURE_SIZE = 16;

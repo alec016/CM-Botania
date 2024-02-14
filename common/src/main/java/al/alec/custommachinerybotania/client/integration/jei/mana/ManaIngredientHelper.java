@@ -1,12 +1,13 @@
 package al.alec.custommachinerybotania.client.integration.jei.mana;
 
 import al.alec.custommachinerybotania.client.integration.jei.CustomIngredientTypes;
-import fr.frinn.custommachinery.*;
-import mezz.jei.api.ingredients.*;
-import mezz.jei.api.ingredients.subtypes.*;
-import net.minecraft.network.chat.*;
-import net.minecraft.resources.*;
-import org.jetbrains.annotations.*;
+import fr.frinn.custommachinery.CustomMachinery;
+import mezz.jei.api.ingredients.IIngredientHelper;
+import mezz.jei.api.ingredients.IIngredientType;
+import mezz.jei.api.ingredients.subtypes.UidContext;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import org.jetbrains.annotations.Nullable;
 
 public class ManaIngredientHelper implements IIngredientHelper<Mana> {
   @Override

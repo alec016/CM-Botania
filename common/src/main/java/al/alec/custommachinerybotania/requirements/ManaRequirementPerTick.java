@@ -1,17 +1,25 @@
 package al.alec.custommachinerybotania.requirements;
 
-import al.alec.custommachinerybotania.*;
-import al.alec.custommachinerybotania.client.integration.jei.mana.*;
-import al.alec.custommachinerybotania.client.integration.jei.wrapper.*;
-import al.alec.custommachinerybotania.components.*;
-import fr.frinn.custommachinery.api.codec.*;
-import fr.frinn.custommachinery.api.component.*;
-import fr.frinn.custommachinery.api.crafting.*;
-import fr.frinn.custommachinery.api.integration.jei.*;
-import fr.frinn.custommachinery.api.requirement.*;
-import fr.frinn.custommachinery.impl.requirement.*;
-import java.util.*;
-import net.minecraft.network.chat.*;
+
+import al.alec.custommachinerybotania.Registration;
+import al.alec.custommachinerybotania.client.integration.jei.mana.Mana;
+import al.alec.custommachinerybotania.client.integration.jei.wrapper.ManaIngredientWrapper;
+import al.alec.custommachinerybotania.components.ManaMachineComponent;
+import fr.frinn.custommachinery.api.codec.NamedCodec;
+import fr.frinn.custommachinery.api.component.MachineComponentType;
+import fr.frinn.custommachinery.api.crafting.CraftingResult;
+import fr.frinn.custommachinery.api.crafting.ICraftingContext;
+import fr.frinn.custommachinery.api.crafting.IMachineRecipe;
+import fr.frinn.custommachinery.api.integration.jei.IJEIIngredientRequirement;
+import fr.frinn.custommachinery.api.integration.jei.IJEIIngredientWrapper;
+import fr.frinn.custommachinery.api.requirement.IRequirement;
+import fr.frinn.custommachinery.api.requirement.ITickableRequirement;
+import fr.frinn.custommachinery.api.requirement.RequirementIOMode;
+import fr.frinn.custommachinery.api.requirement.RequirementType;
+import fr.frinn.custommachinery.impl.requirement.AbstractRequirement;
+import java.util.Collections;
+import java.util.List;
+import net.minecraft.network.chat.Component;
 
 public class ManaRequirementPerTick extends AbstractRequirement<ManaMachineComponent> implements ITickableRequirement<ManaMachineComponent>, IJEIIngredientRequirement<Mana> {
   public static final NamedCodec<ManaRequirementPerTick> CODEC = NamedCodec.record(manaRequirementInstance ->
@@ -19,7 +27,7 @@ public class ManaRequirementPerTick extends AbstractRequirement<ManaMachineCompo
         RequirementIOMode.CODEC.fieldOf("mode").forGetter(IRequirement::getMode),
         NamedCodec.intRange(0, Integer.MAX_VALUE).fieldOf("mana").forGetter(requirement -> requirement.mana)
       ).apply(manaRequirementInstance, ManaRequirementPerTick::new),
-    "Mana requirement"
+    "Mana requirement per tick"
   );
 
   private final int mana;
@@ -63,7 +71,10 @@ public class ManaRequirementPerTick extends AbstractRequirement<ManaMachineCompo
 
   @Override
   public boolean test(ManaMachineComponent component, ICraftingContext context) {
-    return false;
+    return switch (getMode()) {
+      case INPUT -> component.getMana() >= mana;
+      case OUTPUT -> (component.getCapacity() - component.getMana()) >= mana;
+    };
   }
 
   @Override
