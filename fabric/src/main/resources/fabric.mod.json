@@ -20,6 +20,9 @@
     ],
     "client": [
       "es.degrassi.custommachinerybotania.fabric.client.CustommachineryBotaniaFabricClient"
+    ],
+    "jei_mod_plugin": [
+      "es.degrassi.custommachinerybotania.client.integration.jei.CMBJeiPlugin"
     ]
   },
   "mixins": [

@@ -168,7 +168,12 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
     return Registration.MANA_MACHINE_COMPONENT.get();
   }
 
-  public static class Template implements IMachineComponentTemplate<ManaMachineComponent> {
+  public record Template(
+    ComponentIOMode mode,
+    int capacity,
+    int maxInput,
+    int maxOutput
+  ) implements IMachineComponentTemplate<ManaMachineComponent> {
 
     public static final NamedCodec<Template> CODEC = NamedCodec.record(templateInstance ->
       templateInstance.group(
@@ -178,16 +183,6 @@ public class ManaMachineComponent implements IMachineComponent, ITickableCompone
         NamedCodec.intRange(0, Integer.MAX_VALUE).optionalFieldOf("maxOutput").forGetter(template -> Optional.of(template.maxOutput))
       ).apply(templateInstance, (mode, capacity, maxIn, maxOut) -> new Template(mode, capacity, maxIn.orElse(capacity), maxOut.orElse(capacity))), "Mana machine component"
     );
-
-    private final int capacity, maxInput, maxOutput;
-    private final ComponentIOMode mode;
-
-    private Template(ComponentIOMode mode, int capacity, int maxInput, int maxOutput) {
-      this.capacity = capacity;
-      this.maxInput = maxInput;
-      this.maxOutput = maxOutput;
-      this.mode = mode;
-    }
 
     @Override
     public MachineComponentType<ManaMachineComponent> getType() {

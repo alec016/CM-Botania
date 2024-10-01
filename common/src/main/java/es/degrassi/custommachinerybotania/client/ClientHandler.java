@@ -3,22 +3,29 @@ package es.degrassi.custommachinerybotania.client;
 
 import es.degrassi.custommachinerybotania.client.integration.jei.element.ManaGuiElementJeiRenderer;
 import es.degrassi.custommachinerybotania.client.render.element.ManaGuiElementWidget;
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.architectury.platform.Platform;
 import es.degrassi.custommachinerybotania.Registration;
+import es.degrassi.custommachinerybotania.client.screen.creation.component.builder.ManaComponentBuilder;
+import es.degrassi.custommachinerybotania.client.screen.creation.gui.buidler.ManaGuiElementBuilder;
 import fr.frinn.custommachinery.api.guielement.RegisterGuiElementWidgetSupplierEvent;
 import fr.frinn.custommachinery.api.integration.jei.RegisterGuiElementJEIRendererEvent;
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.renderer.GameRenderer;
-import net.minecraft.resources.ResourceLocation;
+import fr.frinn.custommachinery.client.screen.creation.component.RegisterComponentBuilderEvent;
+import fr.frinn.custommachinery.client.screen.creation.gui.RegisterGuiElementBuilderEvent;
 
 public class ClientHandler {
 
   public static void clientInit() {
     RegisterGuiElementWidgetSupplierEvent.EVENT.register(ClientHandler::registerGuiElementWidgets);
+    RegisterComponentBuilderEvent.EVENT.register(ClientHandler::registerMachineComponentBuilders);
+    RegisterGuiElementBuilderEvent.EVENT.register(ClientHandler::registerGuiElementBuilders);
+    RegisterGuiElementJEIRendererEvent.EVENT.register(ClientHandler::registerGuiElementJeiRenderers);
+  }
 
-    if(Platform.isModLoaded("jei"))
-      RegisterGuiElementJEIRendererEvent.EVENT.register(ClientHandler::registerGuiElementJeiRenderers);
+  private static void registerMachineComponentBuilders(final RegisterComponentBuilderEvent event) {
+    event.register(Registration.MANA_MACHINE_COMPONENT.get(), new ManaComponentBuilder());
+  }
+  private static void registerGuiElementBuilders(final RegisterGuiElementBuilderEvent event) {
+    event.register(Registration.MANA_GUI_ELEMENT.get(), new ManaGuiElementBuilder());
   }
 
   private static void registerGuiElementWidgets(RegisterGuiElementWidgetSupplierEvent event) {
@@ -27,18 +34,5 @@ public class ClientHandler {
 
   private static void registerGuiElementJeiRenderers(RegisterGuiElementJEIRendererEvent event) {
     event.register(Registration.MANA_GUI_ELEMENT.get(), new ManaGuiElementJeiRenderer());
-  }
-
-  public static void bindTexture(ResourceLocation texture) {
-    RenderSystem.setShader(GameRenderer::getPositionTexShader);
-    RenderSystem.setShaderTexture(0, texture);
-  }
-
-  public static void renderSlotHighlight(GuiGraphics graphics, int x, int y, int width, int height) {
-    RenderSystem.disableDepthTest();
-    RenderSystem.colorMask(true, true, true, false);
-    graphics.fill(x, y, x + width, y + height, -2130706433);
-    RenderSystem.colorMask(true, true, true, true);
-    RenderSystem.enableDepthTest();
   }
 }

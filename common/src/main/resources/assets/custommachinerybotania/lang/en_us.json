@@ -9,5 +9,7 @@
   "custommachinerybotania.requirements.mana.error.input": "Not enough mana, %s needed but only %s found !",
   "custommachinerybotania.requirements.mana.error.output": "Not enough space for storing %s mana!",
   "custommachinerybotania.requirements.manapertick.error.input": "Not enough mana, %s needed but only %s found !",
-  "custommachinerybotania.requirements.manapertick.error.output": "Not enough space for storing %s mana!"
+  "custommachinerybotania.requirements.manapertick.error.output": "Not enough space for storing %s mana!",
+
+  "custommachinerybotania.gui.creation.components.mana.title": "Mana Component"
 }
