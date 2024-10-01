@@ -1,0 +1,133 @@
+plugins {
+  id 'com.github.johnrengelman.shadow'
+  id "me.shedaniel.unified-publishing"
+}
+
+architectury {
+  platformSetupLoomIde()
+  forge()
+}
+
+loom {
+  forge {
+    mixinConfig "custommachinerybotania.mixins.json"
+  }
+}
+
+configurations {
+  common
+  shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+  compileClasspath.extendsFrom common
+  runtimeClasspath.extendsFrom common
+  developmentForge.extendsFrom common
+}
+
+repositories {
+  // mavens for Forge-exclusives
+  maven { url = "https://maven.theillusivec4.top/" } // Curios
+}
+
+dependencies {
+  forge("net.minecraftforge:forge:${project.minecraft_version}-${project.forge_version}")
+  modApi("dev.architectury:architectury-forge:${project.architectury_api_version}")
+
+  common(project(path: ":common", configuration: "namedElements")) { transitive = false }
+  shadowCommon(project(path: ":common", configuration: "transformProductionForge")) { transitive = false }
+
+  // botania
+  modLocalRuntime "vazkii.patchouli:Patchouli:${minecraft_version}-84-FORGE"
+  modLocalRuntime "top.theillusivec4.curios:curios-forge:5.4.2+1.20.1"
+  modApi "vazkii.botania:Botania:${project.botania_version}-FORGE:api"
+  modApi "vazkii.botania:Botania:${project.botania_version}-FORGE"
+  modLocalRuntime "vazkii.botania:Botania:${project.botania_version}-FORGE"
+
+  // JEI 10
+  modLocalRuntime modCompileOnly("mezz.jei:jei-${project.minecraft_version}-common-api:${project.jei_version}")
+  modLocalRuntime modCompileOnly("mezz.jei:jei-${project.minecraft_version}-forge-api:${project.jei_version}")
+  modLocalRuntime("mezz.jei:jei-${project.minecraft_version}-forge:${project.jei_version}")
+
+  // Custom Machinery
+  modApi "frinn.custommachinery:CustomMachinery-api:${project.minecraft_version}-${project.cm_version}"
+  modApi "frinn.custommachinery:CustomMachinery-common:${project.minecraft_version}-${project.cm_version}"
+  modLocalRuntime "frinn.custommachinery:CustomMachinery-forge:${project.minecraft_version}-${project.cm_version}"
+
+  //KubeJS
+  modLocalRuntime modCompileOnly("dev.latvian.mods:kubejs-forge:${project.kubejs_version}")
+  localRuntime("io.github.llamalad7:mixinextras-forge:0.2.0-rc.4")
+
+  //Crafttweaker
+  modLocalRuntime modCompileOnly("com.blamejared.crafttweaker:CraftTweaker-forge-${project.minecraft_version}:${project.ct_version}")
+}
+
+processResources {
+  inputs.property "version", project.version
+
+  filesMatching("META-INF/mods.toml") {
+    expand "modid": project.modid,
+        "mod_version": project.mod_version,
+        "mod_name": project.mod_name,
+        "mod_description": project.mod_description,
+        "author": project.author,
+        "issues": project.issues,
+        "license": project.license,
+        "icon": project.icon,
+        "minecraft_version": project.minecraft_version,
+        "architectury_version": project.architectury_api_version,
+        "custommachinery_version": project.cm_version,
+        "botania_version": project.botania_version
+  }
+}
+
+shadowJar {
+  exclude "fabric.mod.json"
+  exclude "architectury.common.json"
+
+  configurations = [project.configurations.shadowCommon]
+  archiveClassifier = "dev-shadow"
+}
+
+remapJar {
+  input.set shadowJar.archiveFile
+  dependsOn shadowJar
+  archiveClassifier = null
+}
+
+jar {
+  archiveClassifier = "dev"
+}
+
+components.java {
+  withVariantsFromConfiguration(project.configurations.shadowRuntimeElements) {
+    skip()
+  }
+}
+
+unifiedPublishing {
+  project {
+    displayName = "[Forge]Custom-Machinery-Botania-${project.minecraft_version}-${project.mod_version}"
+    releaseType = "release"
+    if(rootProject.file("CHANGELOG.md").exists()) {
+      changelog = rootProject.file("CHANGELOG.md").text
+    }
+    gameVersions = ["${project.minecraft_version}"]
+    gameLoaders = ["forge"]
+    mainPublication remapJar
+
+    var CURSE_API_KEY = System.getenv("CURSEFORGE_KEY")
+    if (CURSE_API_KEY != null) {
+      curseforge {
+        token = CURSE_API_KEY
+        id = "967739"
+        gameVersions.addAll "Java 17"
+        relations {
+          depends "architectury-api"
+          depends "cloth-config"
+          depends "custom-machinery"
+          depends "botania"
+          optional "crafttweaker"
+          optional "kubejs"
+        }
+      }
+    }
+  }
+}
